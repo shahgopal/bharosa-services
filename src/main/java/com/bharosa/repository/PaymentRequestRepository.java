@@ -5,11 +5,19 @@ package com.bharosa.repository;
  */
 import java.util.List;
 
-import com.bharosa.model.PaymentRequest;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import com.bharosa.model.Campaign;
+import com.bharosa.model.PaymentRequest;
 
 @RepositoryRestResource(collectionResourceRel = "paymentrequest", path = "paymentrequest")
 public interface PaymentRequestRepository  extends PagingAndSortingRepository<PaymentRequest, Long> {
+
+	  List<PaymentRequest> findByCampaign(Campaign campaign);
+	  List<PaymentRequest> findByCampaignId(long campaignId);
+	  
+	  
+	  
+
 }

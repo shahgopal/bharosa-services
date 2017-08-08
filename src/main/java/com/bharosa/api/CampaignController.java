@@ -1,29 +1,72 @@
 package com.bharosa.api;
 
-/**
- * Created by gshah on 7/31/17.
- */
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.bharosa.paytm.PaytmUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import com.bharosa.model.Campaign;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bharosa.model.Campaign;
+import com.bharosa.model.PaymentResponse;
+import com.bharosa.paytm.PaytmUtil;
+import com.bharosa.repository.CampaignRepository;
+import com.bharosa.repository.PaymentRequestRepository;
+import com.bharosa.repository.PaymentResponseRepository;
+
+
 @RestController
-
+@RequestMapping("/api")
 public class CampaignController {
-    private static final String template = "BC, %s!";
-    private final AtomicLong counter = new AtomicLong();
 
-    @RequestMapping(value = "payment", method = RequestMethod.GET, produces = "application/json")
-//    public String greeting(@RequestParam(value="name", defaultValue="World") String name) {
-                public String greeting() {
+	
+	
+	@Autowired
+	private CampaignRepository campaignRepository;
+	
+	@Autowired
+	private PaymentRequestRepository paymentRequestRepository;
+	
+	@Autowired
+	PaymentResponseRepository paymentResponseRepository;
+	
+//	@RequestMapping(value = "payment", method = RequestMethod.GET, produces = "application/json")
+//	public String greeting() {
+//
+//		PaytmUtil paytmUtil = new PaytmUtil();
+//		return paytmUtil.generatePayLoad();
+//	}
+	
+	@RequestMapping(value = "/campaigns", method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Campaign>> getCampaigns() {
+		return new ResponseEntity<>(campaignRepository.findAll(), HttpStatus.OK);
+	}
+	
+	
+	
+	@RequestMapping(value = "/campaign/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Campaign> getCampaign(@PathVariable long id) {
+		Campaign campaign = campaignRepository.findOne(id);
+		
+		if (campaign != null) {
+			campaign.setPaymentRequests(paymentRequestRepository.findByCampaign(campaign));
+			campaign.setPaymentResponses(paymentResponseRepository.findByCampaign(campaign));
+			return new ResponseEntity<>(campaign, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
 
-//        return new Campaign(counter.incrementAndGet(),
-//                String.format(template, name));
-        PaytmUtil paytmUtil = new PaytmUtil();
-        return paytmUtil.generatePayLoad();
-    }
+	@RequestMapping(value = "/campaign", method = RequestMethod.POST)
+	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign) {
+		Campaign savedCampaign = campaignRepository.save(campaign);
+		return new ResponseEntity<>(savedCampaign, HttpStatus.OK);	
+	}
+
+	
+
+	
 }
