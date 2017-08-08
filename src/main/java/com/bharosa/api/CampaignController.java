@@ -3,6 +3,7 @@ package com.bharosa.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,8 @@ import com.bharosa.paytm.PaytmUtil;
 import com.bharosa.repository.CampaignRepository;
 import com.bharosa.repository.PaymentRequestRepository;
 import com.bharosa.repository.PaymentResponseRepository;
+
+import io.swagger.annotations.ApiOperation;
 
 
 @RestController
@@ -39,6 +42,8 @@ public class CampaignController {
 //		return paytmUtil.generatePayLoad();
 //	}
 	
+	@ApiOperation(value = "get all the campaigns", notes = "return campaigns")
+	@CrossOrigin
 	@RequestMapping(value = "/campaigns", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Campaign>> getCampaigns() {
 		return new ResponseEntity<>(campaignRepository.findAll(), HttpStatus.OK);
@@ -46,6 +51,8 @@ public class CampaignController {
 	
 	
 	
+	@ApiOperation(value = "provide selected campaign", notes = "return campaign")
+	@CrossOrigin
 	@RequestMapping(value = "/campaign/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Campaign> getCampaign(@PathVariable long id) {
 		Campaign campaign = campaignRepository.findOne(id);
@@ -60,6 +67,8 @@ public class CampaignController {
 	}
 	
 
+	@ApiOperation(value = "create campaign", notes = "return success")
+	@CrossOrigin
 	@RequestMapping(value = "/campaign", method = RequestMethod.POST)
 	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign) {
 		Campaign savedCampaign = campaignRepository.save(campaign);

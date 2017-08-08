@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,12 @@ import com.bharosa.paytm.PaytmUtil;
 import com.bharosa.repository.CampaignRepository;
 import com.bharosa.repository.PaymentRequestRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api")
+@Api(value = "Payment api" )
 public class PaymentRequestControllar {
 
 	
@@ -30,11 +35,13 @@ public class PaymentRequestControllar {
 	
 	
 	@RequestMapping(value = "/paymentrequests", method = RequestMethod.GET)
+	@CrossOrigin
 	public ResponseEntity<Iterable<PaymentRequest>> getPaymentRequests() {
 		return new ResponseEntity<>(paymentRequestRepository.findAll(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/paymentrequest/{id}", method = RequestMethod.GET)
+	@CrossOrigin
 	public ResponseEntity<PaymentRequest> getPaymentRequest(@PathVariable long id) {
 		PaymentRequest paymentRequest = paymentRequestRepository.findOne(id);
 		if (paymentRequest != null) {
@@ -44,7 +51,9 @@ public class PaymentRequestControllar {
 		}
 	}
 
+	@ApiOperation(value = "Do not use", notes = "do not use")
 	@RequestMapping(value = "/paymentrequest", method = RequestMethod.POST)
+	@CrossOrigin
 	public ResponseEntity<PaymentRequest> createPaymentRequest(@RequestBody PaymentRequest paymentRequest) {
 		if(paymentRequest.getCampaign() != null && paymentRequest.getCampaign().getId() > 0){
 			paymentRequest.setCampaign(campaignRepository.findOne(paymentRequest.getCampaign().getId()));
@@ -54,19 +63,10 @@ public class PaymentRequestControllar {
 	}
 
 
+	@ApiOperation(value = "Provide paytm request", notes = "Returns checksum and other parameters")
 	@RequestMapping(value = "/requestpaytm", method = RequestMethod.POST, consumes = "application/json")
+	@CrossOrigin
 	public ResponseEntity<TreeMap<String, String>> createPaytmLoad(@RequestBody PaytmRequestModel paytmRequestModel) {
-		System.out.println(paytmRequestModel.toString());
-    	System.out.println(paytmRequestModel.getCAMPAIGN_ID());
-    	System.out.println(paytmRequestModel.getCUST_ID());
-    	System.out.println(paytmRequestModel.getTXN_AMOUNT());
-    	System.out.println(paytmRequestModel.getCALLBACK_URL());
-    	System.out.println(paytmRequestModel.getEMAIL());
-    	System.out.println(paytmRequestModel.getINDUSTRY_TYPE_ID());
-    	System.out.println(paytmRequestModel.getMID());
-    	System.out.println(paytmRequestModel.getMOBILE_NO());
-    	System.out.println(paytmRequestModel.getORDER_ID());
-
 		TreeMap<String, String> paramMap = PaytmUtil.generatePayLoad(paytmRequestModel);
 		PaymentRequest pr = PaytmUtil.paymentRequestBuilder(paytmRequestModel);
 		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));

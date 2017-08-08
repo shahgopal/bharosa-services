@@ -40,6 +40,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile('com.h2database:h2')
 	compile('io.springfox:springfox-swagger2:2.7.0')
+	compile('io.springfox:springfox-swagger-ui:2.7.0')
 //	compile('com.paytm.pg:checksum:')
 //	compile('libs/checksum_2.0.0.jar')
 //	runtime('libs/checksum_2.0.0.jar')
