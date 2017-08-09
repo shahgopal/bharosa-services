@@ -39,7 +39,7 @@ public  class PaytmUtil {
         paramMap.put("EMAIL", paytmRequestModel.getEMAIL());
         if (paytmRequestModel.getMOBILE_NO()!= null)
         paramMap.put("MOBILE_NO",paytmRequestModel.getMOBILE_NO());
-        paramMap.put("CALLBACK_URL", paytmRequestModel.getCALLBACK_URL());
+//        paramMap.put("CALLBACK_URL", paytmRequestModel.getCALLBACK_URL());
         
         try {
             String checkSum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(MERCHANT_KEY, paramMap);
@@ -51,7 +51,13 @@ public  class PaytmUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+//        
+//        ORDER_ID=vidisha123&
+//        		CUST_ID=CUST001&
+//        		INDUSTRY_TYPE_ID=Retail&
+//        		CHANNEL_ID=WEB&
+//        		TXN_AMOUNT=1&
+//        		MID=DIY12386817555501617&WEBSITE=DIYtestingweb&PAYTM_MERCHANT_KEY=bKMfNxPPf_QdZppa
         
         return paramMap;
     }
