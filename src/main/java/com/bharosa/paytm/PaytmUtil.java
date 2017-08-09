@@ -29,7 +29,7 @@ public  class PaytmUtil {
     	System.out.println(paytmRequestModel.getCALLBACK_URL());
         TreeMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("MID", MID);
-        paramMap.put("ORDER_ID", "\""+givenUsingPlainJava_whenGeneratingRandomIntegerBounded_thenCorrect()+"\"");
+        paramMap.put("ORDER_ID", givenUsingPlainJava_whenGeneratingRandomIntegerBounded_thenCorrect()+"");
         paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
         paramMap.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);
         paramMap.put("CHANNEL_ID", CHANNEL_ID);
@@ -71,7 +71,6 @@ public  class PaytmUtil {
     	pr.setOrderId(paytmRequestModel.getORDER_ID());
     	pr.setTxnAmount(paytmRequestModel.getTXN_AMOUNT());
     	pr.setEmailId(paytmRequestModel.getEMAIL());
-    	
     	return pr;
     }
 

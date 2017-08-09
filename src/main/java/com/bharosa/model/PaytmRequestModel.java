@@ -6,21 +6,35 @@ public class PaytmRequestModel {
 
 
     public final static String MID="WorldP64425807474247";
-    public final static String MERCHANT_KEY="kbzk1DSbJiV_O3p5";
+    public final static String PAYTM_MERCHANT_KEY="kbzk1DSbJiV_O3p5";
     public final static String INDUSTRY_TYPE_ID="Retail";
     public final static String CHANNEL_ID="WEB";
     public final static String WEBSITE="worldpressplg";
     public final static String PAYTM_URL="https://pguat.paytm.com/oltp-web/processTransaction";
 
 	
-    public long CAMPAIGN_ID;
+    public static String getMid() {
+		return MID;
+	}
+	public static String getPaytmMerchantKey() {
+		return PAYTM_MERCHANT_KEY;
+	}
+	public static String getIndustryTypeId() {
+		return INDUSTRY_TYPE_ID;
+	}
+	public static String getChannelId() {
+		return CHANNEL_ID;
+	}
+	public static String getWebsite() {
+		return WEBSITE;
+	}
+	public static String getPaytmUrl() {
+		return PAYTM_URL;
+	}
+	public long CAMPAIGN_ID;
     public String REQUEST_TYPE;
-//	private String MID;
     public long ORDER_ID; 
     public BigDecimal TXN_AMOUNT; 
-//	private String CHANNEL_ID; 
-//	private String INDUSTRY_TYPE_ID; 
-//	private String WEBSITE;
     public String CHECKSUMHASH; 
     public String MOBILE_NO; 
     public String CUST_ID;
