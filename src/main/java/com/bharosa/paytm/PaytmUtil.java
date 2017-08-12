@@ -5,6 +5,8 @@ import com.bharosa.model.PaytmRequestModel;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.UUID;
+
 /**
  * Created by gshah on 8/4/17.
  */
@@ -43,7 +45,9 @@ public  class PaytmUtil {
         paramMap.put("MID", MID);
         if (paytmRequestModel.getMOBILE_NO()!= null)
         paramMap.put("MOBILE_NO",paytmRequestModel.getMOBILE_NO());
-        paramMap.put("ORDER_ID",paytmRequestModel.getORDER_ID()+"" );
+//        paramMap.put("ORDER_ID",paytmRequestModel.getORDER_ID()+"" );
+        paramMap.put("ORDER_ID",UUID.randomUUID().toString() );
+        
         paramMap.put("TXN_AMOUNT", paytmRequestModel.getTXN_AMOUNT().toPlainString());
         paramMap.put("WEBSITE", WEBSITE);
         
