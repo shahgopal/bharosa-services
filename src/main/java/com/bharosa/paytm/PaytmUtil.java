@@ -31,20 +31,23 @@ public  class PaytmUtil {
     	System.out.println(paytmRequestModel.getCALLBACK_URL());
         TreeMap<String, String> paramMap = new TreeMap<String, String>();
         
+
         
         
-        paramMap.put("ORDER_ID", givenUsingPlainJava_whenGeneratingRandomIntegerBounded_thenCorrect()+"");
-        paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
-        paramMap.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);
-        paramMap.put("CHANNEL_ID", CHANNEL_ID);
-        paramMap.put("TXN_AMOUNT", paytmRequestModel.getTXN_AMOUNT().toPlainString());
-        paramMap.put("MID", MID);
-        paramMap.put("WEBSITE", WEBSITE);
         paramMap.put("CALLBACK_URL", paytmRequestModel.getCALLBACK_URL());
-        if(paytmRequestModel.getEMAIL() != null)
+        paramMap.put("CHANNEL_ID", CHANNEL_ID);
+        paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
         paramMap.put("EMAIL", paytmRequestModel.getEMAIL());
         if (paytmRequestModel.getMOBILE_NO()!= null)
+            paramMap.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);
+        paramMap.put("MID", MID);
+        if(paytmRequestModel.getEMAIL() != null)
         paramMap.put("MOBILE_NO",paytmRequestModel.getMOBILE_NO());
+        paramMap.put("ORDER_ID",paytmRequestModel.getORDER_ID()+"" );
+        paramMap.put("TXN_AMOUNT", paytmRequestModel.getTXN_AMOUNT().toPlainString());
+        paramMap.put("WEBSITE", WEBSITE);
+        
+        
         
         try {
             String checkSum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(MERCHANT_KEY, paramMap);
