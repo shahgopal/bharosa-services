@@ -37,11 +37,11 @@ public  class PaytmUtil {
         paramMap.put("CALLBACK_URL", paytmRequestModel.getCALLBACK_URL());
         paramMap.put("CHANNEL_ID", CHANNEL_ID);
         paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
+        if(paytmRequestModel.getEMAIL() != null)
         paramMap.put("EMAIL", paytmRequestModel.getEMAIL());
         if (paytmRequestModel.getMOBILE_NO()!= null)
             paramMap.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);
         paramMap.put("MID", MID);
-        if(paytmRequestModel.getEMAIL() != null)
         paramMap.put("MOBILE_NO",paytmRequestModel.getMOBILE_NO());
         paramMap.put("ORDER_ID",paytmRequestModel.getORDER_ID()+"" );
         paramMap.put("TXN_AMOUNT", paytmRequestModel.getTXN_AMOUNT().toPlainString());
