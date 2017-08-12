@@ -38,7 +38,8 @@ public  class PaytmUtil {
         
         paramMap.put("CALLBACK_URL", paytmRequestModel.getCALLBACK_URL());
         paramMap.put("CHANNEL_ID", CHANNEL_ID);
-        paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
+        paramMap.put("CUST_ID", UUID.randomUUID().toString());
+//        paramMap.put("CUST_ID", paytmRequestModel.getCUST_ID() != null?paytmRequestModel.getCUST_ID():"ANYNONYMUS");
         if(paytmRequestModel.getEMAIL() != null)
         	paramMap.put("EMAIL", paytmRequestModel.getEMAIL());
         paramMap.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);

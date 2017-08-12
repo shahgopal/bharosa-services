@@ -71,6 +71,7 @@ public class PaymentRequestControllar {
 		PaymentRequest pr = PaytmUtil.paymentRequestBuilder(paytmRequestModel);
 		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));
 		paymentRequestRepository.save(pr);
+		
 		return new ResponseEntity<>(paramMap, HttpStatus.OK);
 	}
 
