@@ -1,20 +1,29 @@
 package com.bharosa.model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
+
 public class PaytmResponseModel {
 	
-	private String MID;
-	private String TXNID; 
-	private String ORDERID; 
-	private String BANKTXNID; 
-	private String TXNAMOUNT; 
-	private String CURRENCY;
-	private String STATUS; 
-	private String RESPCODE; 
-	private String RESPMSG; 
-	private String TXNDATE; 
-	private String GATEWAYNAME; 
-	private String BANKNAME; 
-	private String PAYMENTMODE;
+	public String MID;
+	public String TXNID; 
+	public UUID   ORDERID; 
+	public String BANKTXNID; 
+	public String TXNAMOUNT; 
+	public String CURRENCY;
+	public String STATUS; 
+	public String RESPCODE; 
+	public String RESPMSG; 
+	public Date   TXNDATE; 
+	public String GATEWAYNAME; 
+	public String BANKNAME; 
+	public String PAYMENTMODE;
+	public String CHECKSUMHASH;
+	public String TXNTYPE;
+	
+	
+	
 	
 	public String getMID() {
 		return MID;
@@ -27,12 +36,6 @@ public class PaytmResponseModel {
 	}
 	public void setTXNID(String tXNID) {
 		TXNID = tXNID;
-	}
-	public String getORDERID() {
-		return ORDERID;
-	}
-	public void setORDERID(String oRDERID) {
-		ORDERID = oRDERID;
 	}
 	public String getBANKTXNID() {
 		return BANKTXNID;
@@ -70,12 +73,6 @@ public class PaytmResponseModel {
 	public void setRESPMSG(String rESPMSG) {
 		RESPMSG = rESPMSG;
 	}
-	public String getTXNDATE() {
-		return TXNDATE;
-	}
-	public void setTXNDATE(String tXNDATE) {
-		TXNDATE = tXNDATE;
-	}
 	public String getGATEWAYNAME() {
 		return GATEWAYNAME;
 	}
@@ -93,6 +90,38 @@ public class PaytmResponseModel {
 	}
 	public void setPAYMENTMODE(String pAYMENTMODE) {
 		PAYMENTMODE = pAYMENTMODE;
+	}
+	public UUID getORDERID() {
+		return ORDERID;
+	}
+	public void setORDERID(UUID oRDERID) {
+		ORDERID = oRDERID;
+	}
+	public Date getTXNDATE() {
+		return TXNDATE;
+	}
+	public void setTXNDATE(Date tXNDATE) {
+		TXNDATE = tXNDATE;
+	}
+	public String getCHECKSUMHASH() {
+		return CHECKSUMHASH;
+	}
+	public void setCHECKSUMHASH(String cHECKSUMHASH) {
+		CHECKSUMHASH = cHECKSUMHASH;
+	}
+	public String getTXNTYPE() {
+		return TXNTYPE;
+	}
+	public void setTXNTYPE(String tXNTYPE) {
+		TXNTYPE = tXNTYPE;
+	}
+	@Override
+	public String toString() {
+		return "PaytmResponseModel [MID=" + MID + ", TXNID=" + TXNID + ", ORDERID=" + ORDERID + ", BANKTXNID="
+				+ BANKTXNID + ", TXNAMOUNT=" + TXNAMOUNT + ", CURRENCY=" + CURRENCY + ", STATUS=" + STATUS
+				+ ", RESPCODE=" + RESPCODE + ", RESPMSG=" + RESPMSG + ", TXNDATE=" + TXNDATE + ", GATEWAYNAME="
+				+ GATEWAYNAME + ", BANKNAME=" + BANKNAME + ", PAYMENTMODE=" + PAYMENTMODE + ", CHECKSUMHASH="
+				+ CHECKSUMHASH + ", TXNTYPE=" + TXNTYPE + "]";
 	}
 	
 	

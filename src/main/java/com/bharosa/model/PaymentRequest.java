@@ -2,6 +2,7 @@ package com.bharosa.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Created by gshah on 7/31/17.
@@ -36,8 +39,9 @@ public class PaymentRequest {
 	@JoinColumn(name = "campaign_id")
 	private Campaign campaign;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long orderId;
+//	@GeneratedValue(generator = "uuid")
+//	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private UUID orderId;
 	private BigDecimal txnAmount;
 	private String customerId;
 	private String mobileNo;
@@ -46,6 +50,15 @@ public class PaymentRequest {
 	private String checksumHash;
 	private Date createdAt;
 	private Date updatedAt;
+	private String callbackUrl;
+	private String channelId;
+	private String industryTypeId;
+	private String mid;
+	private String website;
+	
+
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -58,10 +71,10 @@ public class PaymentRequest {
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign;
 	}
-	public long getOrderId() {
+	public UUID getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(long orderId) {
+	public void setOrderId(UUID orderId) {
 		this.orderId = orderId;
 	}
 	public BigDecimal getTxnAmount() {
@@ -112,6 +125,46 @@ public class PaymentRequest {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
+	public String getChannelId() {
+		return channelId;
+	}
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+	public String getIndustryTypeId() {
+		return industryTypeId;
+	}
+	public void setIndustryTypeId(String industryTypeId) {
+		this.industryTypeId = industryTypeId;
+	}
+	public String getMid() {
+		return mid;
+	}
+	public void setMid(String mid) {
+		this.mid = mid;
+	}
+	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+	@Override
+	public String toString() {
+		return "PaymentRequest [id=" + id + ", campaign=" + campaign + ", orderId=" + orderId + ", txnAmount="
+				+ txnAmount + ", customerId=" + customerId + ", mobileNo=" + mobileNo + ", emailId=" + emailId
+				+ ", orderDetails=" + orderDetails + ", checksumHash=" + checksumHash + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", callbackUrl=" + callbackUrl + ", channelId=" + channelId
+				+ ", industryTypeId=" + industryTypeId + ", mid=" + mid + ", website=" + website + "]";
+	}
+	
+	
 
 //	{ "campaign_id":1, "txnAmount":"200", "customerId":"customer2", "mobileNo":"831-214-6646",  "emailId":"timepass1@gmail.com","checksumHash":"not shared"}
 	

@@ -1,6 +1,8 @@
 package com.bharosa.model;
 
-import javax.persistence.CascadeType;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by gshah on 7/31/17.
  */
@@ -13,8 +15,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @NamedEntityGraphs({

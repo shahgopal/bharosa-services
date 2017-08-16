@@ -4,6 +4,7 @@ package com.bharosa.repository;
  * Created by gshah on 8/1/17.
  */
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -18,7 +19,7 @@ public interface PaymentRequestRepository  extends PagingAndSortingRepository<Pa
 
 	  List<PaymentRequest> findByCampaign(Campaign campaign);
 	  List<PaymentRequest> findByCampaignId(long campaignId);
-	  
+	  PaymentRequest findByOrderId(UUID orderId);
 	  
 	  
 

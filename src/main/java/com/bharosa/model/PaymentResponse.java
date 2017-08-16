@@ -3,12 +3,20 @@ package com.bharosa.model;
  * Created by gshah on 7/31/17.
  */
 
-import com.bharosa.security.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * 
@@ -34,7 +42,7 @@ public class PaymentResponse {
 	private PaymentRequest paymentRequest;
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long orderId;
+	private UUID orderId;
 	private BigDecimal txnAmount;
 
 	private String transactionId;
@@ -49,11 +57,14 @@ public class PaymentResponse {
 	private String orderDetails;
 	private String responseMessage;
 	private Date transactionDate;
+	private String transactionType;
 	private String gateWayName;
 	private String bankName;
 	private String paymentMode;
 	private Date createdAt;
 	private Date updatedAt;
+	private String checksumHash;
+	
 	public long getId() {
 		return id;
 	}
@@ -72,10 +83,10 @@ public class PaymentResponse {
 	public void setPaymentRequest(PaymentRequest paymentRequest) {
 		this.paymentRequest = paymentRequest;
 	}
-	public long getOrderId() {
+	public UUID getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(long orderId) {
+	public void setOrderId(UUID orderId) {
 		this.orderId = orderId;
 	}
 	public BigDecimal getTxnAmount() {
@@ -179,6 +190,18 @@ public class PaymentResponse {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public String getTransactionType() {
+		return transactionType;
+	}
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
+	public String getChecksumHash() {
+		return checksumHash;
+	}
+	public void setChecksumHash(String checksumHash) {
+		this.checksumHash = checksumHash;
 	}
 	
 	

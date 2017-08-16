@@ -2,6 +2,7 @@ package com.bharosa.api;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bharosa.model.Campaign;
 import com.bharosa.model.PaymentRequest;
 import com.bharosa.model.PaytmRequestModel;
 import com.bharosa.paytm.PaytmUtil;
@@ -55,6 +57,8 @@ public class PaymentRequestControllar {
 	@RequestMapping(value = "/paymentrequest", method = RequestMethod.POST)
 	@CrossOrigin
 	public ResponseEntity<PaymentRequest> createPaymentRequest(@RequestBody PaymentRequest paymentRequest) {
+		System.out.println("paymentRequest.getCampaign().getId() is " + paymentRequest.getCampaign().getId());
+		
 		if(paymentRequest.getCampaign() != null && paymentRequest.getCampaign().getId() > 0){
 			paymentRequest.setCampaign(campaignRepository.findOne(paymentRequest.getCampaign().getId()));
 		}
@@ -67,12 +71,35 @@ public class PaymentRequestControllar {
 	@RequestMapping(value = "/requestpaytm", method = RequestMethod.POST, consumes = "application/json")
 	@CrossOrigin
 	public ResponseEntity<TreeMap<String, String>> createPaytmLoad(@RequestBody PaytmRequestModel paytmRequestModel) {
-		TreeMap<String, String> paramMap = PaytmUtil.generatePayLoad(paytmRequestModel);
-		PaymentRequest pr = PaytmUtil.paymentRequestBuilder(paytmRequestModel);
-		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));
-		paymentRequestRepository.save(pr);
+
 		
-		return new ResponseEntity<>(paramMap, HttpStatus.OK);
+		TreeMap<String, String> paramMap = null;
+		System.out.println("System.out.println(paytmRequestModel.getCAMPAIGN_ID());"+paytmRequestModel.getCAMPAIGN_ID());
+		if (paytmRequestModel.getCAMPAIGN_ID() != 0) {
+			Campaign campaign = campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID());
+			System.out.println("Campaign"+campaign.getDetails());
+//			paytmRequestModel.getORDER_ID().toString() 
+//			paymentRequestRepository.save(pr);
+			paramMap = PaytmUtil.generatePayLoad(paytmRequestModel);
+			PaymentRequest pr = PaytmUtil.paymentRequestBuilder(paytmRequestModel);
+			pr.setCampaign(campaign);
+			pr.setChecksumHash(paramMap.get("CHECKSUMHASH"));
+			paymentRequestRepository.save(pr);
+			return new ResponseEntity<>(paramMap, HttpStatus.OK);
+		}	
+		else {
+			return new ResponseEntity<>(paramMap, HttpStatus.FAILED_DEPENDENCY);	
+		}
+
+		
+//		if(paytmRequestModel.getCAMPAIGN_ID() == 0 || paymentRequestRepository.find > 0){
+//			paymentRequest.setCampaign(campaignRepository.findOne(campaignRepository.fin));
+//		}
+//		TreeMap<String, String> paramMap = PaytmUtil.generatePayLoad(paytmRequestModel);
+//		PaymentRequest pr = PaytmUtil.paymentRequestBuilder(paytmRequestModel);
+//		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));
+//		paymentRequestRepository.save(pr);
+//		return new ResponseEntity<>(paramMap, HttpStatus.OK);
 	}
 
 	
