@@ -79,7 +79,7 @@ public class PaymentResponseControllar {
 
 		paytmResponseModel.setMID((String)bodyMap.getFirst("MID"));
 		paytmResponseModel.setTXNID((String)bodyMap.getFirst("TXNID")); 
-		paytmResponseModel.setORDERID((UUID)bodyMap.getFirst("ORDERID")); 
+		paytmResponseModel.setORDERID((UUID.fromString((String)bodyMap.getFirst("ORDERID")))); 
 		paytmResponseModel.setBANKTXNID((String)bodyMap.getFirst("BANKTXNID")); 
 		paytmResponseModel.setTXNAMOUNT((String)bodyMap.getFirst("TXNAMOUNT")); 
 		paytmResponseModel.setCURRENCY((String)bodyMap.getFirst("CURRENCY"));
