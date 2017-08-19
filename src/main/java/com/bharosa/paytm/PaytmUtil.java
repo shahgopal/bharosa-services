@@ -157,8 +157,13 @@ public static boolean isValidChecksum(PaytmResponseModel response, PaymentReques
     
     paramMap.put("ORDER_ID",paymentRequest.getOrderId().toString());
 //    paramMap.put("ORDER_ID",UUID.randomUUID().toString() );
-    
-    paramMap.put("TXN_AMOUNT", response.getTXNAMOUNT());//Take amount from response
+
+	
+
+    if(paymentRequest.getTxnAmount().equals(new BigDecimal(response.getTXNAMOUNT())))
+    {
+    paramMap.put("TXN_AMOUNT", paymentRequest.getTxnAmount().stripTrailingZeros().toPlainString());//Take amount from response
+    }
     paramMap.put("WEBSITE", WEBSITE);
     
     
