@@ -1,6 +1,8 @@
 package com.bharosa.api;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -86,7 +88,20 @@ public class PaymentResponseControllar {
 		paytmResponseModel.setSTATUS((String)bodyMap.getFirst("STATUS")); 
 		paytmResponseModel.setRESPCODE((String)bodyMap.getFirst("RESPCODE"));
 		paytmResponseModel.setRESPMSG((String)bodyMap.getFirst("RESPMSG"));
-		paytmResponseModel.setTXNDATE((Date)bodyMap.getFirst("TXNDATE"));
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	
+		try {
+			paytmResponseModel.setTXNDATE(formatter.parse((String)bodyMap.getFirst("TXNDATE")));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Cudnt set the date");
+		}
+		
+		
+
+		
 		paytmResponseModel.setGATEWAYNAME((String)bodyMap.getFirst("GATEWAYNAME")); 
 		paytmResponseModel.setBANKNAME((String)bodyMap.getFirst("BANKNAME"));
 		paytmResponseModel.setPAYMENTMODE((String)bodyMap.getFirst("PAYMENTMODE"));
