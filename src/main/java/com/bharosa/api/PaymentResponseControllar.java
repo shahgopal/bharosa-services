@@ -1,6 +1,9 @@
 package com.bharosa.api;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,7 @@ import com.bharosa.repository.PaymentRequestRepository;
 import com.bharosa.repository.PaymentResponseRepository;
 
 import io.swagger.annotations.ApiOperation;
-
+import org.springframework.util.MultiValueMap;
 @RestController
 @RequestMapping("/api")
 public class PaymentResponseControllar {
@@ -68,7 +71,29 @@ public class PaymentResponseControllar {
 	@ApiOperation(value = "Process paytm response", notes = "Returns success or failure")
 	@RequestMapping(value = "/paytmresponse", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@CrossOrigin
-	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody PaytmResponseModel paytmResponseModel) {
+//	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody PaytmResponseModel paytmResponseModel) {
+	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody MultiValueMap<String, Object> bodyMap) {
+		
+		PaytmResponseModel paytmResponseModel = new PaytmResponseModel();
+		System.out.println("MultiValueMap"+bodyMap.toString());
+
+		paytmResponseModel.setMID((String)bodyMap.getFirst("MID"));
+		paytmResponseModel.setTXNID((String)bodyMap.getFirst("TXNID")); 
+		paytmResponseModel.setORDERID((UUID)bodyMap.getFirst("ORDERID")); 
+		paytmResponseModel.setBANKTXNID((String)bodyMap.getFirst("BANKTXNID")); 
+		paytmResponseModel.setTXNAMOUNT((String)bodyMap.getFirst("TXNAMOUNT")); 
+		paytmResponseModel.setCURRENCY((String)bodyMap.getFirst("CURRENCY"));
+		paytmResponseModel.setSTATUS((String)bodyMap.getFirst("STATUS")); 
+		paytmResponseModel.setRESPCODE((String)bodyMap.getFirst("RESPCODE"));
+		paytmResponseModel.setRESPMSG((String)bodyMap.getFirst("RESPMSG"));
+		paytmResponseModel.setTXNDATE((Date)bodyMap.getFirst("TXNDATE"));
+		paytmResponseModel.setGATEWAYNAME((String)bodyMap.getFirst("GATEWAYNAME")); 
+		paytmResponseModel.setBANKNAME((String)bodyMap.getFirst("BANKNAME"));
+		paytmResponseModel.setPAYMENTMODE((String)bodyMap.getFirst("PAYMENTMODE"));
+		paytmResponseModel.setCHECKSUMHASH((String)bodyMap.getFirst("CHECKSUMHASH"));
+		paytmResponseModel.setTXNTYPE((String)bodyMap.getFirst("TXNTYPE"));
+
+		
 		
 		PaymentResponse pr = PaytmUtil.paymentResponseBuilder(paytmResponseModel);
 		System.out.println("paytmResponseModel"+paytmResponseModel.toString());
