@@ -38,11 +38,13 @@ public class PaymentResponseControllar {
 
 	
 	@RequestMapping(value = "/paymentresponses", method = RequestMethod.GET)
+	@CrossOrigin
 	public ResponseEntity<Iterable<PaymentResponse>> getPaymentResponses() {
 		return new ResponseEntity<>(paymentResponseRepository.findAll(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/paymentresponse/{id}", method = RequestMethod.GET)
+	@CrossOrigin
 	public ResponseEntity<PaymentResponse> getPaymentResponse(@PathVariable long id) {
 		PaymentResponse paymentResponse = paymentResponseRepository.findOne(id);
 		if (paymentResponse != null) {
@@ -53,6 +55,7 @@ public class PaymentResponseControllar {
 	}
 
 	@RequestMapping(value = "/paymentresponse", method = RequestMethod.POST)
+	@CrossOrigin
 	public ResponseEntity<PaymentResponse> createPaymentResponse(@RequestBody PaymentResponse paymentResponse) {
 		
 		if(paymentResponse.getCampaign() != null && paymentResponse.getCampaign().getId() > 0)
@@ -63,7 +66,7 @@ public class PaymentResponseControllar {
 	}
 
 	@ApiOperation(value = "Process paytm response", notes = "Returns success or failure")
-	@RequestMapping(value = "/paytmresponse", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/paytmresponse", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@CrossOrigin
 	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody PaytmResponseModel paytmResponseModel) {
 		
