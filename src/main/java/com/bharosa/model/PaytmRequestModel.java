@@ -3,6 +3,10 @@ package com.bharosa.model;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+
 public class PaytmRequestModel {
 
 //	public final static String MID = "WorldP64425807474247";

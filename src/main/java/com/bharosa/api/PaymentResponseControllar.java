@@ -74,7 +74,7 @@ public class PaymentResponseControllar {
 	@RequestMapping(value = "/paytmresponse", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@CrossOrigin
 //	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody PaytmResponseModel paytmResponseModel) {
-	public ResponseEntity<PaymentResponse> processPaymentResponse(@RequestBody MultiValueMap<String, Object> bodyMap) {
+	public ResponseEntity<String> processPaymentResponse(@RequestBody MultiValueMap<String, Object> bodyMap) {
 		
 		PaytmResponseModel paytmResponseModel = new PaytmResponseModel();
 		System.out.println("MultiValueMap"+bodyMap.toString());
@@ -100,15 +100,11 @@ public class PaymentResponseControllar {
 		}
 		
 		
-
-		
 		paytmResponseModel.setGATEWAYNAME((String)bodyMap.getFirst("GATEWAYNAME")); 
 		paytmResponseModel.setBANKNAME((String)bodyMap.getFirst("BANKNAME"));
 		paytmResponseModel.setPAYMENTMODE((String)bodyMap.getFirst("PAYMENTMODE"));
 		paytmResponseModel.setCHECKSUMHASH((String)bodyMap.getFirst("CHECKSUMHASH"));
 		paytmResponseModel.setTXNTYPE((String)bodyMap.getFirst("TXNTYPE"));
-
-		
 		
 		PaymentResponse pr = PaytmUtil.paymentResponseBuilder(paytmResponseModel);
 		System.out.println("paytmResponseModel"+paytmResponseModel.toString());
@@ -117,11 +113,23 @@ public class PaymentResponseControllar {
 		PaymentRequest paymentRequest = paymentRequestRepository.findByOrderId(pr.getOrderId());
 		pr.setCampaign(paymentRequest.getCampaign());
 		pr.setPaymentRequest(paymentRequest);
-		System.out.println("Payment Processing Status" + PaytmUtil.isValidChecksum(paytmResponseModel, paymentRequest));
+		pr.setIsValidchecksumHash(PaytmUtil.isValidChecksum(paytmResponseModel, paymentRequest));
+		
 		PaymentResponse savedPR = paymentResponseRepository.save(pr);
 //		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));
 		
-		return new ResponseEntity<>(savedPR, HttpStatus.OK);
+		if (savedPR.getStatus().equalsIgnoreCase("TXN_SUCCESS")) {
+			return new ResponseEntity<>(
+					"Thank you for your Donation! We were able to process the transaction successfully", HttpStatus.OK);
+		} else if (savedPR.getStatus().equalsIgnoreCase("PENDING")) {
+			return new ResponseEntity<>("Thank you for your Donation! Your transaction is in pending status ",
+					HttpStatus.OK);
+		}
+//		else (savedPR.getStatus().equalsIgnoreCase("TXN_FAILURE")) {
+		else{
+			return new ResponseEntity<>("We were unable to process the transaction Please try again", HttpStatus.OK);
+		}			
+		
 		
 	}
 

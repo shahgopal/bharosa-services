@@ -3,6 +3,7 @@ package com.bharosa.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,7 @@ public class CampaignController {
 //		return paytmUtil.generatePayLoad();
 //	}
 	
+//	@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
 	@ApiOperation(value = "get all the campaigns", notes = "return campaigns")
 	@CrossOrigin
 	@RequestMapping(value = "/campaigns", method = RequestMethod.GET)
@@ -51,6 +53,7 @@ public class CampaignController {
 	
 	
 	
+//	@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
 	@ApiOperation(value = "provide selected campaign", notes = "return campaign")
 	@CrossOrigin
 	@RequestMapping(value = "/campaign/{id}", method = RequestMethod.GET)

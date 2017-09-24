@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -27,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 
 @Entity
+@Table(name = "payment_response")
 public class PaymentResponse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,29 +44,72 @@ public class PaymentResponse {
 	@JoinColumn(name = "payment_request_id" )
 	private PaymentRequest paymentRequest;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+
+	
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "order_id")
 	private UUID orderId;
-	private BigDecimal txnAmount;
 
+    @Column(name = "txn_amount")
+    private BigDecimal txnAmount;
+
+    @Column(name = "transaction_id")
 	private String transactionId;
+	
+    @Column(name = "bank_transaction_id")
 	private String bankTransactionId;
-	private String currency;
-	private String status;
-	private String responseCode;
 
+    @Column(name = "currency")
+	private String currency;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "response_code")
+    private String responseCode;
+
+    @Column(name = "customer_id")
 	private String customerId;
-	private String mobileNo;
-	private String emailId;
+
+    @Column(name = "mobile_no")
+    private String mobileNo;
+
+    @Column(name = "email_id")
+    private String emailId;
+
+    @Column(name = "order_details")
 	private String orderDetails;
+
+    @Column(name = "response_message")
 	private String responseMessage;
+
+    @Column(name = "transaction_date")
 	private Date transactionDate;
+
+    @Column(name = "transaction_type")
 	private String transactionType;
+
+    @Column(name = "gate_way_name")
 	private String gateWayName;
+
+    @Column(name = "bank_name")
 	private String bankName;
+
+    @Column(name = "payment_mode")
 	private String paymentMode;
+
+    @Column(name = "created_at")
 	private Date createdAt;
+
+    @Column(name = "updated_at")
 	private Date updatedAt;
+
+    @Column(name = "checksum_hash")
 	private String checksumHash;
+
+    @Column(name = "is_validchecksum_hash")
+	private Boolean isValidchecksumHash;
 	
 	public long getId() {
 		return id;
@@ -202,6 +248,12 @@ public class PaymentResponse {
 	}
 	public void setChecksumHash(String checksumHash) {
 		this.checksumHash = checksumHash;
+	}
+	public Boolean getIsValidchecksumHash() {
+		return isValidchecksumHash;
+	}
+	public void setIsValidchecksumHash(Boolean isValidchecksumHash) {
+		this.isValidchecksumHash = isValidchecksumHash;
 	}
 	
 	

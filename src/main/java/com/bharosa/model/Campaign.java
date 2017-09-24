@@ -3,6 +3,7 @@ package com.bharosa.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 /**
  * Created by gshah on 7/31/17.
  */
@@ -16,6 +17,8 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @NamedEntityGraphs({
 @NamedEntityGraph(name = "Campaign.paymentRequests", 
@@ -26,7 +29,7 @@ attributeNodes = @NamedAttributeNode("paymentRequests")),
 })
 public class Campaign {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
     private  String name;
     private  String goal;
@@ -34,11 +37,12 @@ public class Campaign {
     private  String details;
     private  String image;
     private  String video;
+    @Column(name = "created_at")
     private  Date createdAt;
+    @Column(name = "updated_at")
     private  Date updatedAt;
     @OneToMany(mappedBy = "campaign", fetch=FetchType.LAZY)
     private List<PaymentRequest> paymentRequests;
-    
     @OneToMany(mappedBy = "campaign", fetch=FetchType.LAZY)
     private List<PaymentResponse> paymentResponses;
 

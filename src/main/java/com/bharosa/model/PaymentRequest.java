@@ -4,20 +4,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by gshah on 7/31/17.
  */
-import com.bharosa.security.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -29,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 
 @Entity
+@Table(name = "payment_request")
 public class PaymentRequest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,19 +38,34 @@ public class PaymentRequest {
 	@JoinColumn(name = "campaign_id")
 	private Campaign campaign;
 
+
+	
+	
 //	@GeneratedValue(generator = "uuid")
 //	@GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "order_id")
 	private UUID orderId;
+    @Column(name = "txn_amount")
 	private BigDecimal txnAmount;
+    @Column(name = "customer_id")
 	private String customerId;
+    @Column(name = "mobile_no")
 	private String mobileNo;
+    @Column(name = "email_id")
 	private String emailId;
+    @Column(name = "order_details")
 	private String orderDetails;
+    @Column(name = "checksum_hash")
 	private String checksumHash;
+    @Column(name = "created_at")
 	private Date createdAt;
+    @Column(name = "updated_at")
 	private Date updatedAt;
+    @Column(name = "callback_url")
 	private String callbackUrl;
+    @Column(name = "channel_id")
 	private String channelId;
+    @Column(name = "industry_type_id")
 	private String industryTypeId;
 	private String mid;
 	private String website;
