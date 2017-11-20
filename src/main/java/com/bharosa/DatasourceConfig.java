@@ -36,6 +36,9 @@ public class DatasourceConfig {
         return dataSource;
     }
 //
+    
+    
+    
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("datasource") DataSource ds) throws PropertyVetoException{
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
@@ -52,4 +55,6 @@ public class DatasourceConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
+    
+    
 }

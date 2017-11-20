@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
+//@Service
 public class AppUserDetailsService implements UserDetailsService {
 
     private final Logger logger = Logger.getLogger(AppUserDetailsService.class);
@@ -46,9 +46,12 @@ public class AppUserDetailsService implements UserDetailsService {
 
     public User registerUser(User user) {
     	System.out.println("passwordEncoder"+passwordEncoder+ user.toString());
+    		if(user != null && user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+    		}
             user.grantAuthority(Role.ROLE_USER);
             return userRepo.save( user );
+    		
     }
 
     @Transactional // To successfully remove the date @Transactional annotation must be added

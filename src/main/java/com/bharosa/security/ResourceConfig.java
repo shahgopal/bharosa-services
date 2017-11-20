@@ -14,12 +14,21 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.social.security.SocialAuthenticationFilter;
+import org.springframework.social.security.SpringSocialConfigurer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.GenericFilterBean;
+
+//import com.bharosa.security.filter.StatelessAuthenticationFilter;
+//import com.bharosa.social.SocialAuthenticationSuccessHandler;
+import com.bharosa.social.facebook.FacebookTokenAuthenticationFilter;
+//import com.bharosa.social.facebook.SocialAuthenticationSuccessHandler;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,7 +36,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 @Configuration
 @EnableResourceServer
 public class ResourceConfig extends ResourceServerConfigurerAdapter {
@@ -42,7 +51,12 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
     // The TokenStore bean provided at the AuthorizationConfig
     @Autowired
     private TokenStore tokenStore;
-
+//    @Autowired
+//	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
+    
+    @Autowired
+	private FacebookTokenAuthenticationFilter statelessAuthenticationFilter;
+    
     // To allow the rResourceServerConfigurerAdapter to understand the token,
     // it must share the same characteristics with AuthorizationServerConfigurerAdapter.
     // So, we must wire it up the beans in the ResourceServerSecurityConfigurer.
@@ -57,20 +71,44 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
+    	
+    	// Set a custom successHandler on the SocialAuthenticationFilter
+//		final SpringSocialConfigurer socialConfigurer = new SpringSocialConfigurer();
+//		socialConfigurer.addObjectPostProcessor(new ObjectPostProcessor<SocialAuthenticationFilter>() {
+//			@Override
+//			public <O extends SocialAuthenticationFilter> O postProcess(O statelessAuthenticationFilter) {
+//				System.out.println("Handlering syccess");
+//				statelessAuthenticationFilter.setAuthenticationSuccessHandler(socialAuthenticationSuccessHandler);
+//				System.out.println("Handlering syccess");
+//
+//				return statelessAuthenticationFilter;
+//			}
+//		});
 
+    	
+        http
                 .requestMatcher(new OAuthRequestedMatcher())
                 .csrf().disable()
                 .anonymous().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/favicon.ico").permitAll()
                 // when restricting access to 'Roles' you must remove the "ROLE_" part role
                 // for "ROLE_USER" use only "USER"
                 // use the full name when specifying authority access
                 // restricting all access to /api/** to authenticated users
-                .antMatchers("/api/**").authenticated();
+                .antMatchers("/api/**").authenticated().and()
+        		.addFilterAfter (statelessAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
+        		statelessAuthenticationFilter.setRequiresAuthenticationRequestMatcher(
+        	    new AntPathRequestMatcher("/api/**"));
+
+        
+        
+        
     }
 
+
+    
     private static class OAuthRequestedMatcher implements RequestMatcher {
         public boolean matches(HttpServletRequest request) {
             // Determine if the resource called is "/api/**"
