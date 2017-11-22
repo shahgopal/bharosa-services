@@ -1,7 +1,7 @@
 package com.bharosa.model;
 
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,22 +13,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.bharosa.security.social.facebook.SocialMediaService;
 //
 @Entity
 @Table(name = "app_user")
-public class User implements UserDetails{
+public class User  implements SocialUserDetails {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id")
@@ -60,6 +55,36 @@ public class User implements UserDetails{
 //    private List<Role> roles;
 //
 
+
+//	public User(String username, String password, boolean enabled, boolean accountNonExpired,
+//			boolean credentialsNonExpired, boolean accountNonLocked,
+//			Collection<? extends GrantedAuthority> authorities) {
+////      this.accountNonExpired = true;
+////      this.accountNonLocked = true;
+////      this.credentialsNonExpired = true;
+////      this.enabled = true;
+//		
+//		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+//		// TODO Auto-generated constructor stub
+//	}
+//	public User(String username, String password, 
+//			Collection<? extends GrantedAuthority> authorities) {
+//		
+//		super(username, password, true, true, true, true, authorities);
+//		// TODO Auto-generated constructor stub
+//	}
+//	public User(String username, String password){ 
+//		super(username, password, true, true, true, true, null);
+//		// TODO Auto-generated constructor stub
+//	}
+//	public User() {
+//	}
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
@@ -93,9 +118,12 @@ public class User implements UserDetails{
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	
 	@Column(name = "sign_in_provider", length = 20)
 	private SocialMediaService signInProvider;
 
+	  @Column(name = "last_password_reset")
+	  private Date lastPasswordReset;
 
     public User() {
         this.accountNonExpired = true;
@@ -200,5 +228,20 @@ public class User implements UserDetails{
 				+ accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired="
 				+ credentialsNonExpired + ", enabled=" + enabled + "]";
 	}
+	@Override
+	public String getUserId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	  public Date getLastPasswordReset() {
+		    return this.lastPasswordReset;
+		  }
+
+		  public void setLastPasswordReset(Date lastPasswordReset) {
+		    this.lastPasswordReset = lastPasswordReset;
+		  }
+	
+	
 
 }

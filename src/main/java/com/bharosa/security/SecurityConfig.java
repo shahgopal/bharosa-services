@@ -1,75 +1,135 @@
 package com.bharosa.security;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.security.SocialAuthenticationProvider;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.bharosa.security.oauth.AuthenticationTokenFilter;
+import com.bharosa.security.oauth.EntryPointUnauthorizedHandler;
+import com.bharosa.security.oauth.SecurityService;
+import com.bharosa.security.social.facebook.FacebookTokenAuthenticationFilter;
+import com.bharosa.security.social.facebook.FacebookUserDetailsService;
+
+
 @Configuration
-@EnableWebSecurity( debug = true )
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    public UserDetailsService userDetailsService;
+	@Autowired
+	private EntryPointUnauthorizedHandler unauthorizedHandler;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder( passwordEncoder );
-        provider.setUserDetailsService( userDetailsService() );
-        return provider;
-    }
+	@Autowired
+	FacebookUserDetailsService facebookSocialUserDetailsService;
+	@Autowired
+	UsersConnectionRepository usersConnectionRepository;
+	@Autowired
+	private FacebookTokenAuthenticationFilter facebookTokenAuthenticationFilter;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+	@Autowired
+	private SecurityService securityService;
 
-    	http
-//                .formLogin().disable() // disable form authentication
-//                .anonymous().disable() // disable anonymous user
-                .httpBasic().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-//                .addFilterBefore(facebookTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // restricting access to authenticated users
-        .authorizeRequests()
-      .antMatchers("/api/**").authenticated();
+	@Autowired
+	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+	}
 
-    	
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder);
-    }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        // provides the default AuthenticationManager as a Bean
-        return super.authenticationManagerBean();
-    }
-    
-    
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(passwordEncoder());
+		provider.setUserDetailsService(userDetailsService());
+		return provider;
+	}
+
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		// provides the default AuthenticationManager as a Bean
+		List<AuthenticationProvider> provider = new ArrayList<AuthenticationProvider>();
+		provider.add((AuthenticationProvider) socialAuthenticationProvider());
+		provider.add((AuthenticationProvider) authenticationProvider());
+		return new ProviderManager(provider);
+	}
+
+	@Bean
+	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
+		authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
+		return authenticationTokenFilter;
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return this.securityService;
+	}
+
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/register/**").permitAll().antMatchers("/user/**").permitAll().antMatchers("/users/**")
+				.permitAll().anyRequest().hasAnyRole("USER");
+
+		//Adding Social filter 
+		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(facebookTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+	}
+
+	@Bean
+	public FilterRegistrationBean corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("*");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		source.registerCorsConfiguration("/**", config);
+		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return bean;
+	}
+
+	@Bean
+	public SocialAuthenticationProvider socialAuthenticationProvider() {
+		return new SocialAuthenticationProvider(usersConnectionRepository, facebookSocialUserDetailsService);
+	}
 
 }
