@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,5 +70,10 @@ public class AuthenticationController {
 		String refreshedToken = this.tokenUtils.refreshToken(token);
 		return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
 	}
+	
+	@RequestMapping(method = RequestMethod.OPTIONS)
+	public ResponseEntity<?> handleOptions() {
+		return (ResponseEntity<?>) ResponseEntity.ok();
+	}	
 
 }
