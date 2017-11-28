@@ -103,9 +103,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/oauth/token**").permitAll()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/api/**")
 				
-				.antMatchers("/register/**").permitAll().antMatchers("/user/**").permitAll().antMatchers("/users/**")
+//				.permitAll()
+				
+//				.antMatchers("/register/**").permitAll().antMatchers("/user/**").permitAll().antMatchers("/users/**")
 				.permitAll().anyRequest().hasAnyRole("USER");
 
 		//Adding Social filter 

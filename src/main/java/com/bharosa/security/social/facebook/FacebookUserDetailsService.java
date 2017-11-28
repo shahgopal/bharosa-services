@@ -19,7 +19,7 @@ import com.bharosa.repository.UserRepository;
 @Service
 public class FacebookUserDetailsService implements SocialUserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(FacebookTokenAuthenticationFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacebookUserDetailsService.class);
 
 	@Autowired
 	private UserRepository repository;

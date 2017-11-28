@@ -125,20 +125,27 @@ public class FacebookTokenAuthenticationFilter extends AbstractAuthenticationPro
 public void doFilter(javax.servlet.ServletRequest req, javax.servlet.ServletResponse res, javax.servlet.FilterChain chain) throws IOException, ServletException {
 		
 		//TODO Need to clean up this logic
-		RequestMatcher myMatcher = new AntPathRequestMatcher("/register");
-		RequestMatcher myMatcher1 = new AntPathRequestMatcher("/oauth/token");
-		RequestMatcher myMatcher2 = new AntPathRequestMatcher("/favicon.ico");
-		RequestMatcher myMatcher3 = new AntPathRequestMatcher("/api/auth");
-		RequestMatcher myMatcher4 = new AntPathRequestMatcher("/user");
-		RequestMatcher myMatcher5 = new AntPathRequestMatcher("/user");
+//		RequestMatcher myMatcher = new AntPathRequestMatcher("/register");
+//		RequestMatcher myMatcher1 = new AntPathRequestMatcher("/oauth/token");
+//		RequestMatcher myMatcher2 = new AntPathRequestMatcher("/favicon.ico");
+//		RequestMatcher myMatcher3 = new AntPathRequestMatcher("/api/auth");
+//		RequestMatcher myMatcher4 = new AntPathRequestMatcher("/user");
+//		RequestMatcher myMatcher5 = new AntPathRequestMatcher("/user");
 
+		RequestMatcher myMatcher = new AntPathRequestMatcher("/api/**");
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (myMatcher.matches((HttpServletRequest) req) || myMatcher1.matches((HttpServletRequest) req)
-				|| myMatcher2.matches((HttpServletRequest) req) || myMatcher3.matches((HttpServletRequest) req)
-				|| myMatcher4.matches((HttpServletRequest) req) || myMatcher5.matches((HttpServletRequest) req)) {
+//		if (myMatcher.matches((HttpServletRequest) req) || myMatcher1.matches((HttpServletRequest) req)
+//				|| myMatcher2.matches((HttpServletRequest) req) || myMatcher3.matches((HttpServletRequest) req)
+//				|| myMatcher4.matches((HttpServletRequest) req) || myMatcher5.matches((HttpServletRequest) req)) {
+//			logger.info("Antmatcher so going to bypass");
+//    		chain.doFilter(req, res);
+//    	}
+		if (!myMatcher.matches((HttpServletRequest) req)){
+			
 			logger.info("Antmatcher so going to bypass");
     		chain.doFilter(req, res);
-    	}
+		}
     	else if(auth != null && auth.getPrincipal() != null){
 			logger.info("Auth is here so going to bypass");
 			chain.doFilter(req, res);
