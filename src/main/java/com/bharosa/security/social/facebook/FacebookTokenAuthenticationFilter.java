@@ -143,7 +143,7 @@ public void doFilter(javax.servlet.ServletRequest req, javax.servlet.ServletResp
 //    	}
 		if (!myMatcher.matches((HttpServletRequest) req)){
 			
-			logger.info("Antmatcher so going to bypass");
+			logger.info("Antmatcher so going to bypasss");
     		chain.doFilter(req, res);
 		}
     	else if(auth != null && auth.getPrincipal() != null){
