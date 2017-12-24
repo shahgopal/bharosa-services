@@ -72,13 +72,11 @@ public class CampaignController {
 
 	@ApiOperation(value = "create campaign", notes = "return success")
 	@CrossOrigin
-	@RequestMapping(value = "/campaign", method = RequestMethod.POST)
+	@RequestMapping(value = "/campaign", method = RequestMethod.POST )
 	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign) {
 		Campaign savedCampaign = campaignRepository.save(campaign);
 		return new ResponseEntity<>(savedCampaign, HttpStatus.OK);	
 	}
-
-	
 
 	
 }

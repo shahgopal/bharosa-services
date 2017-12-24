@@ -1,5 +1,6 @@
 package com.bharosa.model;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Campaign {
     private  String reason;
     private  String details;
     private  String image;
+    private Blob imageData;
     private  String video;
     @Column(name = "created_at")
     private  Date createdAt;
@@ -149,6 +151,16 @@ public class Campaign {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+
+	public Blob getImageData() {
+		return imageData;
+	}
+
+
+	public void setImageData(Blob imageData) {
+		this.imageData = imageData;
 	}
     
 
