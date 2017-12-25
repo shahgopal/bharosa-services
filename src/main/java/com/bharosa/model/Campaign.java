@@ -37,6 +37,7 @@ public class Campaign {
     private  String reason;
     private  String details;
     private  String image;
+    @Column(name = "image_data")
     private Blob imageData;
     private  String video;
     @Column(name = "created_at")
