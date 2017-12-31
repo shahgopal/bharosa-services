@@ -9,9 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedEntityGraphs;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -30,6 +27,16 @@ public class CampaignImage {
 	private Campaign campaign;
     @Column(name = "image_data")
     private Blob imageData;
+
+    @Column(name = "content_type")
+    private String contentType;
+
+    private  String name;
+    @Column(name = "original_filename")
+	private String originalFilename;
+
+    
+    
     public long getId() {
 		return id;
 	}
@@ -66,10 +73,8 @@ public class CampaignImage {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	private  String name;
-    private String originalFilename;
-    private String contentType;
-    
+
+
     
     
 }

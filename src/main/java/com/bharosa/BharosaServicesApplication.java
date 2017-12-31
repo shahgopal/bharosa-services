@@ -17,7 +17,7 @@ public class BharosaServicesApplication {
 	public BCryptPasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
-	@Bean
+	@Bean 
 	@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 	    public AppUserDetailsService userDetailsService(){
 	        return new AppUserDetailsService();

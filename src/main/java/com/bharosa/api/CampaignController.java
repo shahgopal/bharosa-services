@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ import com.bharosa.repository.CampaignImageRepository;
 import com.bharosa.repository.CampaignRepository;
 import com.bharosa.repository.PaymentRequestRepository;
 import com.bharosa.repository.PaymentResponseRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -101,9 +103,12 @@ public class CampaignController {
 	@RequestMapping(value = "/campaign/multipart", method = RequestMethod.POST,
 	        headers = {"content-type=multipart/mixed","content-type=multipart/form-data"})
 	public ResponseEntity<Campaign> createCampaignMultipart(
-	        @RequestHeader HttpHeaders headers,
-	        @RequestPart(value = "image", required = false) MultipartFile image,
-	        @RequestPart(value = "campaign", required = true) Campaign campaign) throws SerialException, SQLException, IOException {
+	        @RequestParam(value = "image", required = false) MultipartFile image,
+	        @RequestParam(value = "campaign", required = true) String campaignString) throws SerialException, SQLException, IOException {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Campaign campaign = mapper.readValue(campaignString, Campaign.class);
+		
 //	  LOG.info("POST_v1_scouting_activities: headers.getContentType(): {}", headers.getContentType());
 //	  LOG.info("POST_v1_scouting_activities: userId: {}", userId);
 //	  LOG.info("POST_v1_scouting_activities: image.originalFilename: {}, image: {}",
