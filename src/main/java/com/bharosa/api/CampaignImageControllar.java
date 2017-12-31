@@ -33,7 +33,7 @@ public class CampaignImageControllar {
 	
 	@ApiOperation(value = "provide selected campaign image", notes = "return campaign image")
 	@CrossOrigin
-	@RequestMapping(value = "/campaignimage/{id}", method = RequestMethod.GET, produces = 
+	@RequestMapping(value = "/image/{id}", method = RequestMethod.GET, produces = 
 			MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<CampaignImage> getCampaignImage(@PathVariable long id) {
 		Campaign campaign = campaignRepository.findOne(id);
