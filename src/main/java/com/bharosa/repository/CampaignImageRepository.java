@@ -20,8 +20,8 @@ public interface CampaignImageRepository extends PagingAndSortingRepository<Camp
 //    List<Person> findByLastName(@Param("name") String name);
 	
 	  List<CampaignImage> findByCampaign(Campaign campaign);
+	  
 	
 	
 	
-
 }
