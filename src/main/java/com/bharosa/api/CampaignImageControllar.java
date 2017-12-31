@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 @RestController
+@RequestMapping("/campaign")
 public class CampaignImageControllar {
 
 	@Autowired
