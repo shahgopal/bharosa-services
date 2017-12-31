@@ -24,8 +24,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @NamedEntityGraphs({
 @NamedEntityGraph(name = "Campaign.paymentRequests", 
 attributeNodes = @NamedAttributeNode("paymentRequests")),
-@NamedEntityGraph(name = "Campaign.paymentResponse", 
-attributeNodes = @NamedAttributeNode("paymentRequests")),
+@NamedEntityGraph(name = "Campaign.paymentResponses", 
+attributeNodes = @NamedAttributeNode("paymentResponses")),
+@NamedEntityGraph(name = "Campaign.campaignImages", 
+attributeNodes = @NamedAttributeNode("campaignImages")),
 
 })
 public class Campaign {
@@ -37,8 +39,6 @@ public class Campaign {
     private  String reason;
     private  String details;
     private  String image;
-    @Column(name = "image_data")
-    private Blob imageData;
     private  String video;
     @Column(name = "created_at")
     private  Date createdAt;
@@ -48,7 +48,10 @@ public class Campaign {
     private List<PaymentRequest> paymentRequests;
     @OneToMany(mappedBy = "campaign", fetch=FetchType.LAZY)
     private List<PaymentResponse> paymentResponses;
+    @OneToMany(mappedBy = "campaign", fetch=FetchType.LAZY)
+    private List<CampaignImage> campaignImages;
 
+    
     
 //    { "name":"Gopal's Campaign", "goal":"10000 USD", "reason":"illness", "details":"Plese Donate for the illness",  "image":"www.xyz.com/image","video":"www.youtube.com/video" }
     
@@ -155,13 +158,22 @@ public class Campaign {
 	}
 
 
-	public Blob getImageData() {
-		return imageData;
+	public List<CampaignImage> getCampaignImages() {
+		return campaignImages;
 	}
 
 
-	public void setImageData(Blob imageData) {
-		this.imageData = imageData;
+	public void setCampaignImages(List<CampaignImage> campaignImages) {
+		this.campaignImages = campaignImages;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Campaign [id=" + id + ", name=" + name + ", goal=" + goal + ", reason=" + reason + ", details="
+				+ details + ", image=" + image + ", video=" + video + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", paymentRequests=" + paymentRequests + ", paymentResponses=" + paymentResponses
+				+ ", campaignImages=" + campaignImages + "]";
 	}
     
 
