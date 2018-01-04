@@ -45,10 +45,12 @@ public class CampaignImageControllar {
 		CampaignImage image  =images.get(0);
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+	    System.out.println("image.getContentType()" + image.getContentType());
 	    response.setContentType(image.getContentType());
 	    byte[] media = image.getImageData().getBytes(1, (int)image.getImageData().length());
-        ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-        return responseEntity;
+//        ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+	    return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, image.getContentType()).body(media);
+//        return responseEntity;
 }	
 
 	
