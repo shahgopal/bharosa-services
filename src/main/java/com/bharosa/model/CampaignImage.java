@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "campaign_image")
 public class CampaignImage {
+    @Column(name = "campaign_image_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;

@@ -29,7 +29,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "payment_request")
 public class PaymentRequest {
-	@Id
+
+    @Column(name = "payment_request_id")
+    @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 

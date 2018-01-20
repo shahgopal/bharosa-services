@@ -6,21 +6,24 @@ package com.bharosa.repository;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.bharosa.model.Campaign;
+import com.bharosa.model.CampaignImage;
 import com.bharosa.model.PaymentRequest;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "paymentrequest", path = "paymentrequest")
-public interface PaymentRequestRepository  extends PagingAndSortingRepository<PaymentRequest, Long> {
+public interface PaymentRequestRepository extends PagingAndSortingRepository<PaymentRequest, Long> {
 
-	  List<PaymentRequest> findByCampaign(Campaign campaign);
-	  List<PaymentRequest> findByCampaignId(long campaignId);
-	  PaymentRequest findByOrderId(UUID orderId);
-	  
-	  
+	List<PaymentRequest> findByCampaign(Campaign campaign);
+
+	List<PaymentRequest> findByCampaignId(long campaignId);
+
+	PaymentRequest findByOrderId(UUID orderId);
+
 
 }

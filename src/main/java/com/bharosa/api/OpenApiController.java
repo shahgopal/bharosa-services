@@ -1,8 +1,11 @@
 package com.bharosa.api;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bharosa.model.Campaign;
 import com.bharosa.model.CampaignImage;
+import com.bharosa.model.CampaignSupporters;
 import com.bharosa.repository.CampaignImageRepository;
 import com.bharosa.repository.CampaignRepository;
 import com.bharosa.repository.CampaignSupportersRepository;
@@ -32,8 +36,8 @@ import io.swagger.annotations.ApiOperation;
 
 
 @RestController
-@RequestMapping("/api")
-public class CampaignController {
+@RequestMapping("/common")
+public class OpenApiController {
 
 	
 	
@@ -85,8 +89,6 @@ public class CampaignController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-
 	@ApiOperation(value = "provide selected recent campaign", notes = "return campaign")
 	@CrossOrigin
 	@RequestMapping(value = "/campaign/recent", method = RequestMethod.GET)
@@ -98,53 +100,59 @@ public class CampaignController {
 	@ApiOperation(value = "provide campaign with highest goals", notes = "return campaign")
 	@CrossOrigin
 	@RequestMapping(value = "/campaign/highgoal", method = RequestMethod.GET)
-	public ResponseEntity<List<Campaign>> getRecentCampaignsByCampaigns() {
+	public ResponseEntity<List<Campaign>> getRecentCampaignsByGoals() {
 		List<Campaign> campaign = campaignRepository.findTop2ByOrderByGoalDesc();
 			return new ResponseEntity<>(campaign, HttpStatus.OK);
 	}
 
-	
-	
-	@ApiOperation(value = "create campaign", notes = "return success")
+	@ApiOperation(value = "provide campaign with most likes", notes = "return campaign")
 	@CrossOrigin
-	@RequestMapping(value = "/campaign", method = RequestMethod.POST)
-	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign) {
-		System.out.println("campaign is " + campaign);
-		Campaign savedCampaign = campaignRepository.save(campaign);
-		return new ResponseEntity<>(savedCampaign, HttpStatus.OK);	
-	}
+	@RequestMapping(value = "/campaign/likes", method = RequestMethod.GET)
+	public ResponseEntity<List<Campaign>> getRecentCampaignsByLikes() {
+		
+		List<Campaign> campaigns = new ArrayList<Campaign>(); 
 
-	@ApiOperation(value = "create campaign multipart", notes = "return success")
+		
+		List<Object> campaignList = campaignRepository.findByMostLikedCampaign();
+		
+		for(int i=0;i<campaignList.size();i++)
+		{
+			Object[] campaignIdArray =(Object[])campaignList.get(i); 
+			BigInteger campaignId = (BigInteger)campaignIdArray[0];
+			campaigns.add(campaignRepository.findOne(campaignId.longValue()));
+		}	
+
+			return new ResponseEntity<>(campaigns, HttpStatus.OK);
+	}
+	@ApiOperation(value = "provide campaign with popularity", notes = "return campaign")
 	@CrossOrigin
-	@RequestMapping(value = "/campaign/multipart", method = RequestMethod.POST,
-	        headers = {"content-type=multipart/mixed","content-type=multipart/form-data"})
-	public ResponseEntity<Campaign> createCampaignMultipart(
-	        @RequestParam(value = "image", required = false) MultipartFile image,
-	        @RequestParam(value = "campaign", required = true) String campaignString) throws SerialException, SQLException, IOException {
+	@RequestMapping(value = "/campaign/popular", method = RequestMethod.GET)
+	public ResponseEntity<List<Campaign>> getRecentCampaignsByPopularity() {
 		
-		ObjectMapper mapper = new ObjectMapper();
-		Campaign campaign = mapper.readValue(campaignString, Campaign.class);
 		
-//	  LOG.info("POST_v1_scouting_activities: headers.getContentType(): {}", headers.getContentType());
-//	  LOG.info("POST_v1_scouting_activities: userId: {}", userId);
-//	  LOG.info("POST_v1_scouting_activities: image.originalFilename: {}, image: {}",
-//	          (image!=null) ? image.getOriginalFilename() : null, image);
-//	  LOG.info("POST_v1_scouting_activities: scouting_activity_json.getType().getName(): {}, scouting_activity: {}",
+		List<Campaign> campaigns = new ArrayList<Campaign>(); 
+		List<Object> campaignList = campaignRepository.findByCampaignByPopularity();
 		
-		Campaign savedCampaign = campaignRepository.save(campaign);
-		if (image != null) {
-			CampaignImage campaignImage = new CampaignImage(); 
-			campaignImage.setCampaign(savedCampaign);
-			campaignImage.setContentType(image.getContentType());
-			campaignImage.setName(image.getName());
-			campaignImage.setOriginalFilename(image.getOriginalFilename());
-			campaignImage.setImageData(new SerialBlob(image.getBytes()));
-			campaignImageRepository.save(campaignImage);
-			
-		}
-		return new ResponseEntity<>(savedCampaign, HttpStatus.OK);	
+		for(int i=0;i<campaignList.size();i++)
+		{
+			Object[] campaignIdArray =(Object[])campaignList.get(i); 
+			BigInteger campaignId = (BigInteger)campaignIdArray[0];
+			campaigns.add(campaignRepository.findOne(campaignId.longValue()));
+		}	
+		
+		
+		System.out.println("Campaign " + campaigns);
+			return new ResponseEntity<>(campaigns, HttpStatus.OK);
 	}
-
+	@ApiOperation(value = "provide campaign with popularity", notes = "return campaign")
+	@CrossOrigin
+	@RequestMapping(value = "/campaign/pledges", method = RequestMethod.GET)
+	public ResponseEntity<List<Campaign>> getRecentCampaignsByPledges() {
+		List<Object> campaign = campaignRepository.findByMostPaymentRequest();
+			return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 	
+	
+
 	
 }
