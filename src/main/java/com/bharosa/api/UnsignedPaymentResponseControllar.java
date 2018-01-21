@@ -30,7 +30,7 @@ import com.bharosa.repository.PaymentResponseRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.MultiValueMap;
 @RestController
-@RequestMapping("/anyms")
+@RequestMapping("/common")
 public class UnsignedPaymentResponseControllar {
 
 	

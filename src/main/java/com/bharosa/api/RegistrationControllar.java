@@ -23,7 +23,7 @@ public class RegistrationControllar {
 	
 	@ApiOperation(value = "Register User", notes = "Save users")
 	@CrossOrigin
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/common/user/register", method = RequestMethod.POST)
 	public ResponseEntity<String> registerUser(@RequestBody User user) throws Exception {
 		System.out.println("User is " + user);
 		User savedUser = userDetailsService.registerUser(user);

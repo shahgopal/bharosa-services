@@ -46,9 +46,22 @@ public class CampaignSupporterController {
 	CampaignSupportersRepository campaignSupportersRepository;
 
 	@ApiOperation(value = "Do not use", notes = "do not use")
-	@RequestMapping(value = "/likes", method = RequestMethod.POST)
+	@RequestMapping(value = "/create/likes", method = RequestMethod.POST)
 	@CrossOrigin
 	public ResponseEntity<CampaignSupporters> createCampaignLike(@RequestBody CampaignSupporters campaignSupporters) {
+		
+		if(campaignSupporters.getCampaign() != null && campaignSupporters.getCampaign().getId() > 0){
+			campaignSupporters.setCampaign(campaignRepository.findOne(campaignSupporters.getCampaign().getId()));
+		}
+		campaignSupporters.setLike("LIKE");
+		CampaignSupporters savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
+		return new ResponseEntity<>(savedCampaignSupport, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Do not use", notes = "do not use")
+	@RequestMapping(value = "/create/comment", method = RequestMethod.POST)
+	@CrossOrigin
+	public ResponseEntity<CampaignSupporters> createCampaignComment(@RequestBody CampaignSupporters campaignSupporters) {
 		
 		if(campaignSupporters.getCampaign() != null && campaignSupporters.getCampaign().getId() > 0){
 			campaignSupporters.setCampaign(campaignRepository.findOne(campaignSupporters.getCampaign().getId()));
@@ -56,5 +69,6 @@ public class CampaignSupporterController {
 		CampaignSupporters savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
 		return new ResponseEntity<>(savedCampaignSupport, HttpStatus.OK);
 	}
+
 	
 }

@@ -25,7 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/anyms")
+@RequestMapping("/common")
 @Api(value = "Payment api" )
 public class UnsignedPaymentRequestControllar {
 

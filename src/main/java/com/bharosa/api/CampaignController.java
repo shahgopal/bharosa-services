@@ -107,7 +107,7 @@ public class CampaignController {
 	
 	@ApiOperation(value = "create campaign", notes = "return success")
 	@CrossOrigin
-	@RequestMapping(value = "/campaign", method = RequestMethod.POST)
+	@RequestMapping(value = "/create/campaign", method = RequestMethod.POST)
 	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign) {
 		System.out.println("campaign is " + campaign);
 		Campaign savedCampaign = campaignRepository.save(campaign);
@@ -116,7 +116,7 @@ public class CampaignController {
 
 	@ApiOperation(value = "create campaign multipart", notes = "return success")
 	@CrossOrigin
-	@RequestMapping(value = "/campaign/multipart", method = RequestMethod.POST,
+	@RequestMapping(value = "/create/campaign/multipart", method = RequestMethod.POST,
 	        headers = {"content-type=multipart/mixed","content-type=multipart/form-data"})
 	public ResponseEntity<Campaign> createCampaignMultipart(
 	        @RequestParam(value = "image", required = false) MultipartFile image,
