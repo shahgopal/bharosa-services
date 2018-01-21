@@ -152,7 +152,15 @@ public class OpenApiController {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "provide campaign Likes for given campaignwith popularity", notes = "return campaign")
+	@CrossOrigin
+	@RequestMapping(value = "/campaigncomments/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<CampaignSupporters>> getCampaignsComments(@PathVariable long id) {
+		List<CampaignSupporters>  campaignSupporters = campaignSupportersRepository.findByCampaignId(id);
+			return new ResponseEntity<>(campaignSupporters, HttpStatus.OK);
+	}
 	
+		
 
 	
 }
