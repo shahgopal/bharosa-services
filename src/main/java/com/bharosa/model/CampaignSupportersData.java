@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "campaign_supporters")
-public class CampaignSupporters {
+public class CampaignSupportersData {
     @Column(name = "campaign_supporters_id")
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +30,17 @@ public class CampaignSupporters {
     private  Date createdAt;
     @Column(name = "updated_at")
     private  Date updatedAt;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private User user;
 
+    
     
     
     
     @JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "campaign_id")
-	private Campaign campaign;
+	private CampaignData campaignData;
 	public long getId() {
 		return id;
 	}
@@ -68,13 +71,21 @@ public class CampaignSupporters {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public Campaign getCampaign() {
-		return campaign;
+	public CampaignData getCampaignData() {
+		return campaignData;
 	}
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
+	public void setCampaignData(CampaignData campaignData) {
+		this.campaignData = campaignData;
 	}
 
+	public User getAppUser() {
+		return user;
+	}
+
+
+	public void setAppUser(User user) {
+		this.user = user;
+	}
     
 	
     

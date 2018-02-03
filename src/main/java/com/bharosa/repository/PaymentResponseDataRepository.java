@@ -11,16 +11,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.bharosa.model.Campaign;
-import com.bharosa.model.PaymentResponse;
+import com.bharosa.model.CampaignData;
+import com.bharosa.model.PaymentResponseData;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "paymentresponse", path = "paymentresponse")
-public interface PaymentResponseRepository  extends PagingAndSortingRepository<PaymentResponse, Long> {
+public interface PaymentResponseDataRepository  extends PagingAndSortingRepository<PaymentResponseData, Long> {
 
-  List<PaymentResponse> findByCampaign(@Param("campaign") Campaign campaign);
-  List<PaymentResponse> findByCampaignId(long campaignId);
-  List<PaymentResponse> findByOrderId(UUID orderId);
+  List<PaymentResponseData> findByCampaignData(@Param("campaign") CampaignData campaign);
+  List<PaymentResponseData> findByCampaignDataId(long campaignId);
+  List<PaymentResponseData> findByOrderId(UUID orderId);
 
 	
 }

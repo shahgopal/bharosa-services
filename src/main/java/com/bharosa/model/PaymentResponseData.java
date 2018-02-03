@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "payment_response")
-public class PaymentResponse {
+public class PaymentResponseData {
 
     @Column(name = "payment_response_id")
     @Id
@@ -40,12 +40,14 @@ public class PaymentResponse {
 	@JsonBackReference
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "campaign_id")
-	private Campaign campaign;
+	private CampaignData campaignData;
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "payment_request_id" )
-	private PaymentRequest paymentRequest;
+	private PaymentRequestData paymentRequestData;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    private User user;
 	
 
 	
@@ -119,17 +121,17 @@ public class PaymentResponse {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Campaign getCampaign() {
-		return campaign;
+	public CampaignData getCampaignData() {
+		return campaignData;
 	}
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
+	public void setCampaign(CampaignData campaignData) {
+		this.campaignData = campaignData;
 	}
-	public PaymentRequest getPaymentRequest() {
-		return paymentRequest;
+	public PaymentRequestData getPaymentRequestData() {
+		return paymentRequestData;
 	}
-	public void setPaymentRequest(PaymentRequest paymentRequest) {
-		this.paymentRequest = paymentRequest;
+	public void setPaymentRequestData(PaymentRequestData paymentRequestData) {
+		this.paymentRequestData = paymentRequestData;
 	}
 	public UUID getOrderId() {
 		return orderId;
@@ -258,6 +260,12 @@ public class PaymentResponse {
 		this.isValidchecksumHash = isValidchecksumHash;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 //	{ "campaign_id":1, "paymentRequest_id":1,"txnAmount":"100","transactionId":"transaction1","bankTransactionId":"bankTransaction1","currency":"USD","status":"SUCCESS", "customerId":"customer2", "mobileNo":"831-214-6646",  "emailId":"timepass2@gmail.com","checksumHash":"not shared"}
 //	@ManyToOne

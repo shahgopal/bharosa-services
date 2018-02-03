@@ -1,7 +1,7 @@
 package com.bharosa.paytm;
-import com.bharosa.model.Campaign;
-import com.bharosa.model.PaymentRequest;
-import com.bharosa.model.PaymentResponse;
+import com.bharosa.model.CampaignData;
+import com.bharosa.model.PaymentRequestData;
+import com.bharosa.model.PaymentResponseData;
 import com.bharosa.model.PaytmRequestModel;
 import com.bharosa.model.PaytmResponseModel;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
@@ -91,9 +91,9 @@ public  class PaytmUtil {
         return  leftLimit + (int) (new Random().nextFloat() * (rightLimit - leftLimit));
     }
 
-    public static PaymentRequest paymentRequestBuilder(PaytmRequestModel paytmRequestModel)
+    public static PaymentRequestData paymentRequestBuilder(PaytmRequestModel paytmRequestModel)
     {
-    	PaymentRequest pr = new PaymentRequest();
+    	PaymentRequestData pr = new PaymentRequestData();
     	pr.setChecksumHash(paytmRequestModel.getCHECKSUMHASH());
     	pr.setCustomerId(paytmRequestModel.getCUST_ID());
     	pr.setEmailId(paytmRequestModel.getEMAIL());
@@ -114,10 +114,10 @@ public  class PaytmUtil {
     }
     
     
-    public static PaymentResponse paymentResponseBuilder(PaytmResponseModel paytmResponseModel)
+    public static PaymentResponseData paymentResponseBuilder(PaytmResponseModel paytmResponseModel)
     {
     
-    	PaymentResponse pr = new PaymentResponse();
+    	PaymentResponseData pr = new PaymentResponseData();
 		pr.setTransactionId(paytmResponseModel.getTXNID());
 		pr.setOrderId(paytmResponseModel.getORDERID());
     	pr.setTxnAmount(new BigDecimal(paytmResponseModel.getTXNAMOUNT()));
@@ -135,7 +135,7 @@ public  class PaytmUtil {
     }
 
     
-public static boolean isValidChecksum(PaytmResponseModel response, PaymentRequest paymentRequest){
+public static boolean isValidChecksum(PaytmResponseModel response, PaymentRequestData paymentRequest){
 	
 	System.out.println("In Valid Checksum");
 	System.out.println("In Valid Checksum PaytmResponseModel"+response);

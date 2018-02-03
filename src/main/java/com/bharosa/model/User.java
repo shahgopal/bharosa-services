@@ -118,6 +118,9 @@ public class User  implements SocialUserDetails {
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	@Column(name = "biography" )
+    private String biography;
+
 	
 	@Column(name = "sign_in_provider", length = 20)
 	private SocialMediaService signInProvider;
@@ -219,6 +222,15 @@ public class User  implements SocialUserDetails {
 
 	public void setSignInProvider(SocialMediaService signInProvider) {
 		this.signInProvider = signInProvider;
+	}
+
+	
+	public String getBiography() {
+		return biography;
+	}
+
+	public void setBiography(String biography) {
+		this.biography = biography;
 	}
 
 	@Override

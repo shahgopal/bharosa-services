@@ -1,4 +1,4 @@
-package com.bharosa.model;
+package com.bharosa.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,59 +19,26 @@ import javax.persistence.Table;
  */
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-/**
- * 
- * @author gshah Sample Content { "goal":"goal2", "reason":"reason2",
- *         "details":"details",  "image":"details","video":"details"}
- *         {"campaign_id":1, "orderId":"123", "txnAmount":"1234" }
- * 
- */
-
-@Entity
-@Table(name = "payment_request")
 public class PaymentRequest {
 
-    @Column(name = "payment_request_id")
     @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "campaign_id")
-	private Campaign campaign;
-
-
-	
-	
-//	@GeneratedValue(generator = "uuid")
-//	@GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "order_id")
-	private UUID orderId;
-    @Column(name = "txn_amount")
-	private BigDecimal txnAmount;
-    @Column(name = "customer_id")
-	private String customerId;
-    @Column(name = "mobile_no")
-	private String mobileNo;
-    @Column(name = "email_id")
-	private String emailId;
-    @Column(name = "order_details")
-	private String orderDetails;
-    @Column(name = "checksum_hash")
-	private String checksumHash;
-    @Column(name = "created_at")
-	private Date createdAt;
-    @Column(name = "updated_at")
-	private Date updatedAt;
-    @Column(name = "callback_url")
-	private String callbackUrl;
-    @Column(name = "channel_id")
-	private String channelId;
-    @Column(name = "industry_type_id")
-	private String industryTypeId;
-	private String mid;
-	private String website;
+    protected long id;
+//    protected Campaign campaign;
+    protected AppUser appUser;
+    protected UUID orderId;
+    protected BigDecimal txnAmount;
+    protected String customerId;
+    protected String mobileNo;
+    protected String emailId;
+    protected String orderDetails;
+    protected String checksumHash;
+    protected Date createdAt;
+    protected Date updatedAt;
+    protected String callbackUrl;
+    protected String channelId;
+    protected String industryTypeId;
+    protected String mid;
+    protected String website;
 	
 
 	
@@ -81,12 +49,12 @@ public class PaymentRequest {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Campaign getCampaign() {
-		return campaign;
-	}
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-	}
+//	public Campaign getCampaign() {
+//		return campaign;
+//	}
+//	public void setCampaign(Campaign campaign) {
+//		this.campaign = campaign;
+//	}
 	public UUID getOrderId() {
 		return orderId;
 	}
@@ -173,7 +141,7 @@ public class PaymentRequest {
 	}
 	@Override
 	public String toString() {
-		return "PaymentRequest [id=" + id + ", campaign=" + campaign + ", orderId=" + orderId + ", txnAmount="
+		return "PaymentRequest [id=" + id + ", campaignData="  + ", orderId=" + orderId + ", txnAmount="
 				+ txnAmount + ", customerId=" + customerId + ", mobileNo=" + mobileNo + ", emailId=" + emailId
 				+ ", orderDetails=" + orderDetails + ", checksumHash=" + checksumHash + ", createdAt=" + createdAt
 				+ ", updatedAt=" + updatedAt + ", callbackUrl=" + callbackUrl + ", channelId=" + channelId
@@ -182,24 +150,12 @@ public class PaymentRequest {
 	
 	
 
-//	{ "campaign_id":1, "txnAmount":"200", "customerId":"customer2", "mobileNo":"831-214-6646",  "emailId":"timepass1@gmail.com","checksumHash":"not shared"}
-	
-	
-//	@ManyToOne
-//	@JoinColumn(name = "name")
-//	private User user;
-
-	// private String transactionId;
-	// private String bankTransactionId;
-	// private String currency;
-	// private String status;
-	// private String responseCode;
-	// private String responseMessage;
-	// private Date transactionDate;
-	// private String gateWayName;
-	// private String bankName;
-	// private String paymentMode;
-
+	public AppUser getAppUser() {
+		return appUser;
+	}
+	public void setAppUser(AppUser appUser) {
+		this.appUser = appUser;
+	}
 
 
 }

@@ -20,15 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bharosa.model.Campaign;
-import com.bharosa.model.CampaignImage;
-import com.bharosa.model.CampaignSupporters;
-import com.bharosa.model.PaymentRequest;
-import com.bharosa.repository.CampaignImageRepository;
-import com.bharosa.repository.CampaignRepository;
-import com.bharosa.repository.CampaignSupportersRepository;
-import com.bharosa.repository.PaymentRequestRepository;
-import com.bharosa.repository.PaymentResponseRepository;
+import com.bharosa.model.CampaignSupportersData;
+import com.bharosa.repository.CampaignDataRepository;
+import com.bharosa.repository.CampaignSupportersDataRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.ApiOperation;
@@ -41,32 +35,32 @@ public class CampaignSupporterController {
 	
 	
 	@Autowired
-	private CampaignRepository campaignRepository;
+	private CampaignDataRepository campaignRepository;
 	@Autowired
-	CampaignSupportersRepository campaignSupportersRepository;
+	CampaignSupportersDataRepository campaignSupportersRepository;
 
 	@ApiOperation(value = "Do not use", notes = "do not use")
 	@RequestMapping(value = "/create/likes", method = RequestMethod.POST)
 	@CrossOrigin
-	public ResponseEntity<CampaignSupporters> createCampaignLike(@RequestBody CampaignSupporters campaignSupporters) {
+	public ResponseEntity<CampaignSupportersData> createCampaignLike(@RequestBody CampaignSupportersData campaignSupporters) {
 		
-		if(campaignSupporters.getCampaign() != null && campaignSupporters.getCampaign().getId() > 0){
-			campaignSupporters.setCampaign(campaignRepository.findOne(campaignSupporters.getCampaign().getId()));
+		if(campaignSupporters.getCampaignData() != null && campaignSupporters.getCampaignData().getId() > 0){
+			campaignSupporters.setCampaignData(campaignRepository.findOne(campaignSupporters.getCampaignData().getId()));
 		}
 		campaignSupporters.setLike("LIKE");
-		CampaignSupporters savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
+		CampaignSupportersData savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
 		return new ResponseEntity<>(savedCampaignSupport, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Do not use", notes = "do not use")
 	@RequestMapping(value = "/create/comment", method = RequestMethod.POST)
 	@CrossOrigin
-	public ResponseEntity<CampaignSupporters> createCampaignComment(@RequestBody CampaignSupporters campaignSupporters) {
+	public ResponseEntity<CampaignSupportersData> createCampaignComment(@RequestBody CampaignSupportersData campaignSupporters) {
 		
-		if(campaignSupporters.getCampaign() != null && campaignSupporters.getCampaign().getId() > 0){
-			campaignSupporters.setCampaign(campaignRepository.findOne(campaignSupporters.getCampaign().getId()));
+		if(campaignSupporters.getCampaignData() != null && campaignSupporters.getCampaignData().getId() > 0){
+			campaignSupporters.setCampaignData(campaignRepository.findOne(campaignSupporters.getCampaignData().getId()));
 		}
-		CampaignSupporters savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
+		CampaignSupportersData savedCampaignSupport = campaignSupportersRepository.save(campaignSupporters);
 		return new ResponseEntity<>(savedCampaignSupport, HttpStatus.OK);
 	}
 

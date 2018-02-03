@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "campaign_image")
-public class CampaignImage {
+public class CampaignImageData {
     @Column(name = "campaign_image_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +25,7 @@ public class CampaignImage {
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "campaign_id")
-	private Campaign campaign;
+	private CampaignData campaignData;
     @Column(name = "image_data")
     private Blob imageData;
 
@@ -44,11 +44,11 @@ public class CampaignImage {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Campaign getCampaign() {
-		return campaign;
+	public CampaignData getCampaignData() {
+		return campaignData;
 	}
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
+	public void setCampaignData(CampaignData campaignData) {
+		this.campaignData = campaignData;
 	}
 	public Blob getImageData() {
 		return imageData;

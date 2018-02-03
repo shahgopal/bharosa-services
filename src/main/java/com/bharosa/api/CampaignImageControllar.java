@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bharosa.model.Campaign;
-import com.bharosa.model.CampaignImage;
-import com.bharosa.repository.CampaignImageRepository;
-import com.bharosa.repository.CampaignRepository;
+import com.bharosa.model.CampaignData;
+import com.bharosa.model.CampaignImageData;
+import com.bharosa.repository.CampaignDataRepository;
+import com.bharosa.repository.CampaignImageDataRepository;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -30,19 +30,19 @@ import io.swagger.annotations.ApiOperation;
 public class CampaignImageControllar {
 
 	@Autowired
-	private CampaignRepository campaignRepository;
+	private CampaignDataRepository campaignRepository;
 	
 	@Autowired
-	private CampaignImageRepository campaignImageRepository;
+	private CampaignImageDataRepository campaignImageRepository;
 
 	
 	@ApiOperation(value = "provide selected campaign image", notes = "return campaign image")
 	@CrossOrigin
 	@RequestMapping(value = "/image/{id}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getCampaignImage(@PathVariable long id, final HttpServletResponse response) throws SQLException {
-		Campaign campaign = campaignRepository.findOne(id);
-		List<CampaignImage> images = campaignImageRepository.findByCampaign(campaign);
-		CampaignImage image  =images.get(0);
+		CampaignData campaign = campaignRepository.findOne(id);
+		List<CampaignImageData> images = campaignImageRepository.findByCampaignData(campaign);
+		CampaignImageData image  =images.get(0);
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 	    System.out.println("image.getContentType()" + image.getContentType());

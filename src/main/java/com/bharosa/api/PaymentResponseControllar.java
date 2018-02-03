@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bharosa.model.Campaign;
-import com.bharosa.model.PaymentRequest;
-import com.bharosa.model.PaymentResponse;
+import com.bharosa.model.CampaignData;
+import com.bharosa.model.PaymentRequestData;
+import com.bharosa.model.PaymentResponseData;
 import com.bharosa.model.PaytmRequestModel;
 import com.bharosa.model.PaytmResponseModel;
 import com.bharosa.paytm.PaytmUtil;
-import com.bharosa.repository.CampaignRepository;
-import com.bharosa.repository.PaymentRequestRepository;
-import com.bharosa.repository.PaymentResponseRepository;
+import com.bharosa.repository.CampaignDataRepository;
+import com.bharosa.repository.PaymentRequestDataRepository;
+import com.bharosa.repository.PaymentResponseDataRepository;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.MultiValueMap;
@@ -35,23 +35,23 @@ public class PaymentResponseControllar {
 
 	
 	@Autowired
-	PaymentResponseRepository paymentResponseRepository;
+	PaymentResponseDataRepository paymentResponseRepository;
 	@Autowired
-	CampaignRepository campaignRepository;
+	CampaignDataRepository campaignRepository;
 	@Autowired
-	PaymentRequestRepository paymentRequestRepository;
+	PaymentRequestDataRepository paymentRequestRepository;
 
 	
 	@RequestMapping(value = "/paymentresponses", method = RequestMethod.GET)
 	@CrossOrigin
-	public ResponseEntity<Iterable<PaymentResponse>> getPaymentResponses() {
+	public ResponseEntity<Iterable<PaymentResponseData>> getPaymentResponses() {
 		return new ResponseEntity<>(paymentResponseRepository.findAll(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/paymentresponse/{id}", method = RequestMethod.GET)
 	@CrossOrigin
-	public ResponseEntity<PaymentResponse> getPaymentResponse(@PathVariable long id) {
-		PaymentResponse paymentResponse = paymentResponseRepository.findOne(id);
+	public ResponseEntity<PaymentResponseData> getPaymentResponse(@PathVariable long id) {
+		PaymentResponseData paymentResponse = paymentResponseRepository.findOne(id);
 		if (paymentResponse != null) {
 			return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
 		} else {
@@ -61,12 +61,12 @@ public class PaymentResponseControllar {
 
 	@RequestMapping(value = "/paymentresponse", method = RequestMethod.POST)
 	@CrossOrigin
-	public ResponseEntity<PaymentResponse> createPaymentResponse(@RequestBody PaymentResponse paymentResponse) {
+	public ResponseEntity<PaymentResponseData> createPaymentResponse(@RequestBody PaymentResponseData paymentResponse) {
 		
-		if(paymentResponse.getCampaign() != null && paymentResponse.getCampaign().getId() > 0)
-			paymentResponse.setCampaign(campaignRepository.findOne(paymentResponse.getCampaign().getId()));
+		if(paymentResponse.getCampaignData() != null && paymentResponse.getCampaignData().getId() > 0)
+			paymentResponse.setCampaign(campaignRepository.findOne(paymentResponse.getCampaignData().getId()));
 			
-		PaymentResponse savedPR = paymentResponseRepository.save(paymentResponse);
+		PaymentResponseData savedPR = paymentResponseRepository.save(paymentResponse);
 		return new ResponseEntity<>(savedPR, HttpStatus.OK);
 	}
 
@@ -106,16 +106,16 @@ public class PaymentResponseControllar {
 		paytmResponseModel.setCHECKSUMHASH((String)bodyMap.getFirst("CHECKSUMHASH"));
 		paytmResponseModel.setTXNTYPE((String)bodyMap.getFirst("TXNTYPE"));
 		
-		PaymentResponse pr = PaytmUtil.paymentResponseBuilder(paytmResponseModel);
+		PaymentResponseData pr = PaytmUtil.paymentResponseBuilder(paytmResponseModel);
 		System.out.println("paytmResponseModel"+paytmResponseModel.toString());
 		System.out.println("paytmResponseModel"+ paytmResponseModel.getORDERID());
 		System.out.println("paytmResponseModel"+ pr.getOrderId());
-		PaymentRequest paymentRequest = paymentRequestRepository.findByOrderId(pr.getOrderId());
-		pr.setCampaign(paymentRequest.getCampaign());
-		pr.setPaymentRequest(paymentRequest);
+		PaymentRequestData paymentRequest = paymentRequestRepository.findByOrderId(pr.getOrderId());
+		pr.setCampaign(paymentRequest.getCampaignData());
+		pr.setPaymentRequestData(paymentRequest);
 		pr.setIsValidchecksumHash(PaytmUtil.isValidChecksum(paytmResponseModel, paymentRequest));
 		
-		PaymentResponse savedPR = paymentResponseRepository.save(pr);
+		PaymentResponseData savedPR = paymentResponseRepository.save(pr);
 //		pr.setCampaign(campaignRepository.findOne(paytmRequestModel.getCAMPAIGN_ID()));
 		
 		if (savedPR.getStatus().equalsIgnoreCase("TXN_SUCCESS")) {

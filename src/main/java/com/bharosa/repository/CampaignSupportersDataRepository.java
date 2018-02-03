@@ -8,27 +8,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.bharosa.model.Campaign;
-import com.bharosa.model.CampaignSupporters;
+import com.bharosa.model.CampaignData;
+import com.bharosa.model.CampaignSupportersData;
 
 import io.swagger.annotations.Api;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "campaignSupporters", path = "campaignsupporters")
 @Api(value = "CampaignRepository api" )
-public interface CampaignSupportersRepository extends PagingAndSortingRepository<CampaignSupporters, Long> {
+public interface CampaignSupportersDataRepository extends PagingAndSortingRepository<CampaignSupportersData, Long> {
 
 //    List<Person> findByLastName(@Param("name") String name);
 	
 //	List<CampaignSupporters> findTop5ByOrderByIdDesc();
 //	List<CampaignSupporters> findTop5ByOrderByLikesDesc();
-	Set<CampaignSupporters> findTop5ByOrderByCampaignDesc();
+	Set<CampaignSupportersData> findTop5ByOrderByCampaignDataDesc();
 	
 	
 
 	
-	  List<CampaignSupporters> findByCampaign(@Param("campaign") Campaign campaign);
-	  List<CampaignSupporters> findByCampaignId(long campaignId);
+	  List<CampaignSupportersData> findByCampaignData(@Param("campaign") CampaignData campaignData);
+	  List<CampaignSupportersData> findByCampaignDataId(long campaignId);
 
 	
 	  
