@@ -3,6 +3,8 @@ package com.bharosa.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.standard.Destination;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeMap;
@@ -29,6 +31,12 @@ public class DataConverter {
         	List<CampaignSupporters> campaignSupporterList = new ArrayList<CampaignSupporters>(); 
         	campaignSupporterDataList.forEach(p -> campaignSupporterList.add(convertCampaignSupporters(p, new CampaignSupporters())));
         }
+        if (!CollectionUtils.isEmpty(source.getCampaignImagesData())) {
+        	List<CampaignImageData> campaignImagesDataList = source.getCampaignImagesData();
+        	List<CampaignImage> campaignImageList = new ArrayList<CampaignImage>(); 
+        	campaignImagesDataList.forEach(p -> campaignImageList.add(convertCampaignImage(p, new CampaignImage())));
+        }
+
         if(source.getUser()!=null){
             target.setUser(convertUser(source.getUser(), new AppUser()));
         }
@@ -43,8 +51,10 @@ public class DataConverter {
         ModelMapper mMapper = new ModelMapper();
         
         TypeMap<CampaignImageData, CampaignImage> typeMap = mMapper.createTypeMap(CampaignImageData.class, CampaignImage.class);
-        		typeMap.addMappings(mapper -> mapper.<Long>map(src -> src.getCampaignData().getId(), (dest, v) -> dest.setCampaignId(v)));
-//        		typeMap.addMappings(mapper -> mapper.skip(target::setCampaignData));
+//        		typeMap.addMappings(mapper -> mapper.<Long>map(src -> src.getCampaignData().getId(), (dest, v) -> dest.setCampaignId(v)));
+        		typeMap.addMapping(src -> src.getCampaignData().getId(), CampaignImage::setCampaignId);
+//        		typeMap.addMapping(Source::getAge, Destination::setAgeString);
+//        		typeMap.addMappings(mapper -> mapper.skip(CampaignImage::setImageData));
 
         mMapper.map(source, target);
         return target;

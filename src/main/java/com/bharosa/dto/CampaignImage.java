@@ -2,6 +2,8 @@ package com.bharosa.dto;
 
 import java.sql.Blob;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class CampaignImage {
 
@@ -9,7 +11,7 @@ public class CampaignImage {
 //	protected Campaign campaignData;
 	protected long campaignId;
 
-	protected Blob imageData;
+//	protected Blob imageData;
 	protected String contentType;
 	protected  String name;
 	protected String originalFilename;
@@ -33,12 +35,12 @@ public class CampaignImage {
 		this.campaignId = campaignId;
 	}
 	
-	public Blob getImageData() {
-		return imageData;
-	}
-	public void setImageData(Blob imageData) {
-		this.imageData = imageData;
-	}
+//	public Blob getImageData() {
+//		return imageData;
+//	}
+//	public void setImageData(Blob imageData) {
+//		this.imageData = imageData;
+//	}
 	public String getName() {
 		return name;
 	}
@@ -80,10 +82,10 @@ public class CampaignImage {
 //			this.obj.setCampaignData(campaign);
 //			return this;
 //		}
-		public Builder withImageData(Blob imageData) {
-			this.obj.setImageData(imageData);
-			return this;
-		}
+//		public Builder withImageData(Blob imageData) {
+//			this.obj.setImageData(imageData);
+//			return this;
+//		}
 		public Builder withContentType(String contentType) {
 			this.obj.setContentType(contentType);
 			return this;
