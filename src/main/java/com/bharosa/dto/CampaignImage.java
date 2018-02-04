@@ -6,7 +6,9 @@ import java.sql.Blob;
 public class CampaignImage {
 
 	protected long id;
-	protected Campaign campaignData;
+//	protected Campaign campaignData;
+	protected long campaignId;
+
 	protected Blob imageData;
 	protected String contentType;
 	protected  String name;
@@ -18,12 +20,19 @@ public class CampaignImage {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Campaign getCampaignData() {
-		return campaignData;
+//	public Campaign getCampaignData() {
+//		return campaignData;
+//	}
+//	public void setCampaignData(Campaign campaignData) {
+//		this.campaignData = campaignData;
+//	}
+	public long getCampaignId() {
+		return campaignId;
 	}
-	public void setCampaignData(Campaign campaignData) {
-		this.campaignData = campaignData;
+	public void setCampaignId(long campaignId) {
+		this.campaignId = campaignId;
 	}
+	
 	public Blob getImageData() {
 		return imageData;
 	}
@@ -67,10 +76,10 @@ public class CampaignImage {
 			this.obj.setId(id);
 			return this;
 		}
-		public Builder withCampaign(Campaign campaign) {
-			this.obj.setCampaignData(campaign);
-			return this;
-		}
+//		public Builder withCampaign(Campaign campaign) {
+//			this.obj.setCampaignData(campaign);
+//			return this;
+//		}
 		public Builder withImageData(Blob imageData) {
 			this.obj.setImageData(imageData);
 			return this;

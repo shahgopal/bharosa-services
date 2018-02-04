@@ -16,7 +16,13 @@ public class CampaignSupporters {
 	protected  Date updatedAt;
 	protected AppUser appUser;
 //	protected Campaign campaignData;
-
+	protected long campaignId;
+	public long getCampaignId() {
+		return campaignId;
+	}
+	public void setCampaignId(long campaignId) {
+		this.campaignId = campaignId;
+	}
 	public long getId() {
 		return id;
 	}

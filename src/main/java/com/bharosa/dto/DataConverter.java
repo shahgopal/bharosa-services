@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.springframework.util.CollectionUtils;
 
 import com.bharosa.model.CampaignData;
@@ -40,6 +41,11 @@ public class DataConverter {
             return target;
         }
         ModelMapper mMapper = new ModelMapper();
+        
+        TypeMap<CampaignImageData, CampaignImage> typeMap = mMapper.createTypeMap(CampaignImageData.class, CampaignImage.class);
+        		typeMap.addMappings(mapper -> mapper.<Long>map(src -> src.getCampaignData().getId(), (dest, v) -> dest.setCampaignId(v)));
+//        		typeMap.addMappings(mapper -> mapper.skip(target::setCampaignData));
+
         mMapper.map(source, target);
         return target;
 
