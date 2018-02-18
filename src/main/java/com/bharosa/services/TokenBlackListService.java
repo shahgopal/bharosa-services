@@ -28,7 +28,7 @@ public class TokenBlackListService {
     }
 
     @Async
-    public void addToEnabledList(Long userId, String jti, Long expired ) {
+    public void addToEnabledList(String userId, String jti, Long expired ) {
         // clean all black listed tokens for user
         List<TokenBlackList> list = tokenBlackListRepo.queryAllByUserIdAndIsBlackListedTrue(userId);
         if (list != null && list.size() > 0) {
@@ -64,4 +64,7 @@ public class TokenBlackListService {
             message = String.format("Token with jti[%s] not found.",jti);
         }
     }
+    
+    
+    
 }

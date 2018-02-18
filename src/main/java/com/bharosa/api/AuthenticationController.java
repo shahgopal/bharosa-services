@@ -45,7 +45,7 @@ public class AuthenticationController {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "${com.bharosa.route.authentication.auth}", method = RequestMethod.POST)
 	public ResponseEntity<?> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest,
 			Device device) throws AuthenticationException {
 
@@ -70,6 +70,15 @@ public class AuthenticationController {
 		String refreshedToken = this.tokenUtils.refreshToken(token);
 		return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
 	}
+	
+
+	@RequestMapping(value = "${com.bharosa.route.authentication.logout}", method = RequestMethod.GET)
+	public ResponseEntity<?> logoutRequest(HttpServletRequest request) {
+		String token = request.getHeader(this.tokenHeader);
+		this.tokenUtils.addTokenToBlackList(token);
+		return ResponseEntity.ok("");
+	}
+
 	
 	@RequestMapping(method = RequestMethod.OPTIONS)
 	public ResponseEntity<?> handleOptions() {

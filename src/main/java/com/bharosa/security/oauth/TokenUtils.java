@@ -10,12 +10,15 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.bharosa.model.User;
+import com.bharosa.services.TokenBlackListService;
+import com.bharosa.services.TokenBlackListService.TokenNotFoundException;
 
 
 @Component
@@ -34,6 +37,8 @@ public class TokenUtils {
   @Value("${com.bharosa.token.expiration}")
   private Long expiration;
 
+  @Autowired TokenBlackListService blackListService;
+  
   public String getUsernameFromToken(String token) {
     String username;
     try {
@@ -125,12 +130,17 @@ public class TokenUtils {
     return (this.AUDIENCE_TABLET.equals(audience) || this.AUDIENCE_MOBILE.equals(audience));
   }
 
+  
+  
   public String generateToken(UserDetails userDetails, Device device) {
     Map<String, Object> claims = new HashMap<String, Object>();
     claims.put("sub", userDetails.getUsername());
     claims.put("audience", this.generateAudience(device));
     claims.put("created", this.generateCurrentDate());
-    return this.generateToken(claims);
+    
+    String token = this.generateToken(claims);
+    blackListService.addToEnabledList(userDetails.getUsername(), token, this.getExpirationDateFromToken(token).getTime());
+    return token;
   }
 
   private String generateToken(Map<String, Object> claims) {
@@ -162,21 +172,43 @@ public class TokenUtils {
       final Claims claims = this.getClaimsFromToken(token);
       claims.put("created", this.generateCurrentDate());
       refreshedToken = this.generateToken(claims);
+      blackListService.addToBlackList(token);
     } catch (Exception e) {
       refreshedToken = null;
     }
     return refreshedToken;
   }
 
-  public Boolean validateToken(String token, UserDetails userDetails) {
+  public Boolean validateToken(String token, UserDetails userDetails)  {
 	  User user = (User) userDetails;
     final String username = this.getUsernameFromToken(token);
     final Date created = this.getCreatedDateFromToken(token);
     final Date expiration = this.getExpirationDateFromToken(token);
     logger.info("username.equals(user.getUsername())={}", username.equals(user.getUsername()));
     logger.info("this.isTokenExpired(token)={}",this.isTokenExpired(token));
-    return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)) //&& !(this.isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset()))
-    		);
+    //TODO GOPAL add check for blacklisted token
+    try {
+    	
+        logger.info("blackListService.isBlackListed(token)={}",blackListService.isBlackListed(token));
+        boolean isTokenValid=username.equals(user.getUsername()) && !this.isTokenExpired(token) && !blackListService.isBlackListed(token);
+        logger.info("Validating token={}",blackListService.isBlackListed(token));
+        logger.info("Validating token={}",isTokenValid);
+		return isTokenValid;
+	} catch (TokenNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	}
   }
 
+  public void addTokenToBlackList(String token)  {
+	  try {
+		blackListService.addToBlackList(token);
+	} catch (TokenNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  }
+
+  
 }

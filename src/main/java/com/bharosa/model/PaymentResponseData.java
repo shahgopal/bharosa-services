@@ -274,3 +274,21 @@ public class PaymentResponseData {
 
 
 }
+
+
+
+
+
+//index=
+//lcapp host="uw2-data-verification-*"source="*application*""Received BizOp event for dispatching:"|
+//timechart span=1d
+//count as INCOMING_EVENT|appendcols[
+//search host="uw2-data-verification-*"source="*application*""Method successfully handle BizOp event"|
+//timechart span=1d
+//count as SUCCESS_EVENT]|appendcols[
+//search host="uw2-data-verification-*"source="*application*""Running W2 verification"OR"Running Paystub verification"|
+//timechart span=1d
+//count as OCR_START]|appendcols[
+//search host="uw2-data-verification-*"source="*application*""Run Paystub verification success*"OR"Run W2 verification success*"|
+//timechart span=1d
+//count as OCR_COMPLETE]

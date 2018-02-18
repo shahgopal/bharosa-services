@@ -275,11 +275,15 @@ public void doFilter(javax.servlet.ServletRequest req, javax.servlet.ServletResp
 			User registration = createUserForRegistration(token.getConnection());
 			User registered;
 			try {
+					
 				registered = appUserDetailsService.registerUser(registration);
+				System.out.println("User is registered" + registered);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				throw new SocialAuthenticationException("An email address was found from the database." + e1);
 			}
+			
+			
 			ConnectionRepository repo = usersConnectionRepository.createConnectionRepository(registered.getEmail());
 			repo.addConnection(token.getConnection());
 			Authentication success = getAuthenticationManager().authenticate(token);

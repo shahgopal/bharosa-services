@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.security.SocialUserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,8 +110,10 @@ public class CreateCampaignController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Optional<User> user=null;
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-		    String currentUserName = authentication.getName();
-		    user = userRepository.findByUsername(currentUserName);
+			
+			
+			String useremail = ((User) authentication.getPrincipal()).getEmail();
+		    user = userRepository.findByEmail(useremail);
 		    campaign.setUser(user.get());
 		}
 		System.out.println("campaign is " + campaign);

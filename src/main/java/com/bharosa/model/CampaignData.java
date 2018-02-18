@@ -103,6 +103,11 @@ public class CampaignData {
     private  Date createdAt;
     @Column(name = "updated_at")
     private  Date updatedAt;
+    @Column(name = "campaign_status")
+    private  String status;
+    
+    
+    
     @OneToMany(mappedBy = "campaignData", fetch=FetchType.LAZY)
     private List<PaymentRequestData> paymentRequestsData;
     @OneToMany(mappedBy = "campaignData", fetch=FetchType.LAZY)
@@ -251,6 +256,15 @@ public class CampaignData {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

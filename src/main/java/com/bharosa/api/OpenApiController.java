@@ -14,6 +14,7 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,8 @@ import com.bharosa.dto.CampaignSupporters;
 import com.bharosa.dto.DataConverter;
 import com.bharosa.model.CampaignData;
 import com.bharosa.model.CampaignSupportersData;
+import com.bharosa.model.PaymentRequestData;
+import com.bharosa.model.PaymentResponseData;
 import com.bharosa.dto.Campaign;
 import com.bharosa.repository.CampaignDataRepository;
 import com.bharosa.repository.CampaignImageDataRepository;
@@ -106,12 +109,26 @@ public class OpenApiController {
 	@RequestMapping(value = "/campaign/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Campaign> getCampaign(@PathVariable long id) {
 		CampaignData campaignData = campaignRepository.findOne(id);
+		int sum =0;
 		if (campaignData != null) {
-			campaignData.setPaymentRequestsData(paymentRequestRepository.findByCampaignData(campaignData));
-			campaignData.setPaymentResponsesData(paymentResponseRepository.findByCampaignData(campaignData));
-			campaignData.setCampaignSupportersData(campaignSupportersRepository.findByCampaignData(campaignData));
+			List<PaymentResponseData> paymentResponseList = paymentResponseRepository.findByCampaignData(campaignData);
+			List<PaymentRequestData> paymentRequestList = paymentRequestRepository.findByCampaignData(campaignData);
+			List<CampaignSupportersData> campaignSupportersList = campaignSupportersRepository.findByCampaignData(campaignData);
+	        if (!CollectionUtils.isEmpty(paymentResponseList)) {
+	        	campaignData.setPaymentResponsesData(paymentResponseList);
+	        	sum = paymentResponseList.stream().filter(o -> o.getTxnAmount().intValueExact()>0).mapToInt(o -> o.getTxnAmount().intValueExact()).sum();
+	        }
+	        if (!CollectionUtils.isEmpty(paymentRequestList)) {
+	        	campaignData.setPaymentRequestsData(paymentRequestList);
+	        }
+	        if (!CollectionUtils.isEmpty(campaignSupportersList)) {
+	        	campaignData.setCampaignSupportersData(campaignSupportersList);
+	        	
+	        }
 			Campaign campaign = new Campaign();
 			DataConverter.convertCampaign(campaignData, campaign);
+			campaign.setAchievedGoal(sum);
+			
 			return new ResponseEntity<>(campaign, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

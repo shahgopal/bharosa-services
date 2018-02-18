@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TokenBlackListRepo  extends Repository<TokenBlackList, Long> {
    Optional<TokenBlackList> findByJti(String jti);
-   List<TokenBlackList> queryAllByUserIdAndIsBlackListedTrue(Long userId);
+   List<TokenBlackList> queryAllByUserIdAndIsBlackListedTrue(String userId);
    void save(TokenBlackList tokenBlackList);
-   List<TokenBlackList> deleteAllByUserIdAndExpiresBefore(Long userId, Long date);
+   List<TokenBlackList> deleteAllByUserIdAndExpiresBefore(String userId, Long date);
 }

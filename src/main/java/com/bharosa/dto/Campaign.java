@@ -19,7 +19,8 @@ public class Campaign {
 	protected List<CampaignImage> campaignImagesData;
 	protected List<CampaignSupporters> campaignSupportersData;
 	protected AppUser user;
-
+	protected int achievedGoal;
+	protected String status;
     
 //    { "name":"Gopal's Campaign", "goal":"10000 USD", "reason":"illness", "details":"Plese Donate for the illness",  "image":"www.xyz.com/image","video":"www.youtube.com/video" }
     
@@ -163,6 +164,16 @@ public class Campaign {
 	}
 
 
+	public int getAchievedGoal() {
+		return achievedGoal;
+	}
+
+
+	public void setAchievedGoal(int achievedGoal) {
+		this.achievedGoal = achievedGoal;
+	}
+
+
 	public void setUser(AppUser user) {
 		this.user = user;
 	}
@@ -249,6 +260,14 @@ public class Campaign {
 		
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {

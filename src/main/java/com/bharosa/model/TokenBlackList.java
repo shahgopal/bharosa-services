@@ -17,7 +17,7 @@ public class TokenBlackList {
     private String jti;
     
 	@Column(name = "user_id")    
-    private Long userId;
+    private String userId;
     
 	@Column(name = "expires")    
     private Long expires;
@@ -28,7 +28,7 @@ public class TokenBlackList {
     public TokenBlackList() {
     }
 
-    public TokenBlackList(Long userId, String jti, Long expires) {
+    public TokenBlackList(String userId, String jti, Long expires) {
         this.jti = jti;
         this.userId = userId;
         this.expires = expires;
@@ -42,11 +42,11 @@ public class TokenBlackList {
         this.jti = jti;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
